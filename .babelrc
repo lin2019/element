@@ -33,7 +33,7 @@
           {
             "root": ["element-ui"],
             "alias": {
-              "element-ui/src": "@yq-ui/code/lib"
+              "element-ui/src": "yq-ui-code/lib"
             }
           }
         ]
