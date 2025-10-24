@@ -4,7 +4,7 @@
     <div class="main-cnt">
       <router-view></router-view>
     </div>
-    <main-footer v-if="lang !== 'play' && !isComponent"></main-footer>
+    <main-footer v-if="lang !== 'play' && !isComponent && !isUtilOrCharts"></main-footer>
   </div>
 </template>
 
@@ -41,7 +41,12 @@
         return this.$route.path.split('/')[1] || 'zh-CN';
       },
       isComponent() {
-        return /^component-/.test(this.$route.name || '');
+        const routeName = this.$route.name || '';
+        return /^component-/.test(routeName) || /^util-/.test(routeName) || /^charts-/.test(routeName);
+      },
+      isUtilOrCharts() {
+        const path = this.$route.path;
+        return path.includes('/util') || path.includes('/charts');
       }
     },
 

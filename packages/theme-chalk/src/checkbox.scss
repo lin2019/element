@@ -12,7 +12,7 @@
   display: inline-block;
   white-space: nowrap;
   user-select: none;
-  margin-right: 30px;
+  margin-right: 16px;
 
   @include when(bordered) {
     padding: $--checkbox-bordered-padding;
@@ -209,15 +209,15 @@
     &::after {
       box-sizing: content-box;
       content: "";
-      border: 1px solid $--checkbox-checked-icon-color;
+      border: 2px solid $--checkbox-checked-icon-color;  // 增加边框粗细
       border-left: 0;
       border-top: 0;
-      height: 7px;
-      left: 4px;
+      height: 9px;      // 调整高度（18px 勾选框适配）
+      left: 5px;        // 调整水平位置
       position: absolute;
-      top: 1px;
+      top: 2px;         // 调整垂直位置
       transform: rotate(45deg) scaleY(0);
-      width: 3px;
+      width: 4px;       // 调整宽度
       transition: transform .15s ease-in .05s;
       transform-origin: center;
     }
@@ -235,7 +235,7 @@
 
   @include e(label) {
     display: inline-block;
-    padding-left: 10px;
+    padding-left: 4px;
     line-height: 19px;
     font-size: $--checkbox-font-size;
   }

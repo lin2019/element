@@ -89,8 +89,14 @@ import Empty from '../packages/empty/index.js';
 import Descriptions from '../packages/descriptions/index.js';
 import DescriptionsItem from '../packages/descriptions-item/index.js';
 import Result from '../packages/result/index.js';
+import BarChart from '../packages/bar-chart/index.js';
 import locale from 'element-ui/src/locale';
 import CollapseTransition from 'element-ui/src/transitions/collapse-transition';
+
+// 导入 yq 工具函数，会自动挂载到 window.yq
+import './utils/index.js';
+// 导入自定义指令
+import directives from 'element-ui/src/utils/custom-directives';
 
 const components = [
   Pagination,
@@ -177,6 +183,7 @@ const components = [
   Descriptions,
   DescriptionsItem,
   Result,
+  BarChart,
   CollapseTransition
 ];
 
@@ -190,6 +197,11 @@ const install = function(Vue, opts = {}) {
 
   Vue.use(InfiniteScroll);
   Vue.use(Loading.directive);
+
+  // 注册自定义指令
+  Object.keys(directives).forEach(key => {
+    Vue.directive(key, directives[key]);
+  });
 
   Vue.prototype.$ELEMENT = {
     size: opts.size || '',
@@ -305,5 +317,6 @@ export default {
   Empty,
   Descriptions,
   DescriptionsItem,
-  Result
+  Result,
+  BarChart
 };

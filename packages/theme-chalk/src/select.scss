@@ -29,6 +29,7 @@
 
     &:focus {
       border-color: $--select-input-focus-border-color;
+      background-color: $--input-focus-fill;
     }
   }
 
@@ -70,6 +71,7 @@
 
     &.is-focus .el-input__inner {
       border-color: $--select-input-focus-border-color;
+      background-color: $--input-focus-fill;
     }
   }
 

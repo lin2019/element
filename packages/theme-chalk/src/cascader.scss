@@ -26,6 +26,7 @@
 
       &:focus {
         border-color: $--input-focus-border;
+        background-color: $--input-focus-fill;
       }
     }
 
@@ -45,6 +46,7 @@
     @include when(focus) {
       .el-input__inner {
         border-color: $--input-focus-border;
+        background-color: $--input-focus-fill;
       }
     }
   }

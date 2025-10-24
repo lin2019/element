@@ -13,27 +13,56 @@
   white-space: nowrap;
   outline: none;
   font-size: $--font-size-base;
-  margin-right: 30px;
+  margin-right: 16px;
   @include utils-user-select(none);
 
   @include when(bordered) {
     padding: $--radio-bordered-padding;
     border-radius: $--border-radius-base;
-    border: $--border-base;
+    border: 1px solid transparent;
     box-sizing: border-box;
     height: $--radio-bordered-height;
+    background-color: $--color-light-white;
+
+    // 隐藏整个 input 容器（包含小圆圈）
+    .el-radio__input {
+      display: none;
+    }
+
+    // 移除 label 左侧间距
+    .el-radio__label {
+      padding-left: 0;
+    }
 
     &.is-checked {
       border-color: $--color-primary;
+      background-color: rgba($--color-primary, 0.1);
     }
 
     &.is-disabled {
       cursor: not-allowed;
-      border-color: $--border-color-lighter;
+      
+      // 未选中的禁用状态：与信息按钮一致
+      background-color: mix($--color-white, $--color-info, 60%);
+      border-color: mix($--color-white, $--color-info, 60%);
+      
+      .el-radio__label {
+        color: $--color-white;
+      }
+      
+      // 选中的禁用状态：与主题色按钮禁用状态一致
+      &.is-checked {
+        background-color: mix($--color-white, $--color-primary, 60%);
+        border-color: mix($--color-white, $--color-primary, 60%);
+        
+        .el-radio__label {
+          color: $--color-white;
+        }
+      }
     }
 
     & + .el-radio.is-bordered {
-      margin-left: 10px;
+      // margin-left: 10px;
     }
   }
 
@@ -44,10 +73,28 @@
       height: $--radio-bordered-medium-height;
       .el-radio__label {
         font-size: $--button-medium-font-size;
+        padding-left: 0;
       }
-      .el-radio__inner {
-        height: $--radio-bordered-medium-input-height;
-        width: $--radio-bordered-medium-input-width;
+      .el-radio__input {
+        display: none;
+      }
+      
+      &.is-checked {
+        border-color: $--color-primary;
+      }
+      
+      &.is-disabled {
+        background-color: mix($--color-white, $--color-info, 60%);
+        border-color: mix($--color-white, $--color-info, 60%);
+        
+        .el-radio__label {
+          color: $--color-white;
+        }
+        
+        &.is-checked {
+          background-color: mix($--color-white, $--color-primary, 60%);
+          border-color: mix($--color-white, $--color-primary, 60%);
+        }
       }
     }
   }
@@ -58,10 +105,28 @@
       height: $--radio-bordered-small-height;
       .el-radio__label {
         font-size: $--button-small-font-size;
+        padding-left: 0;
       }
-      .el-radio__inner {
-        height: $--radio-bordered-small-input-height;
-        width: $--radio-bordered-small-input-width;
+      .el-radio__input {
+        display: none;
+      }
+      
+      &.is-checked {
+        border-color: $--color-primary;
+      }
+      
+      &.is-disabled {
+        background-color: mix($--color-white, $--color-info, 60%);
+        border-color: mix($--color-white, $--color-info, 60%);
+        
+        .el-radio__label {
+          color: $--color-white;
+        }
+        
+        &.is-checked {
+          background-color: mix($--color-white, $--color-primary, 60%);
+          border-color: mix($--color-white, $--color-primary, 60%);
+        }
       }
     }
   }
@@ -72,10 +137,28 @@
       height: $--radio-bordered-mini-height;
       .el-radio__label {
         font-size: $--button-mini-font-size;
+        padding-left: 0;
       }
-      .el-radio__inner {
-        height: $--radio-bordered-mini-input-height;
-        width: $--radio-bordered-mini-input-width;
+      .el-radio__input {
+        display: none;
+      }
+      
+      &.is-checked {
+        border-color: $--color-primary;
+      }
+      
+      &.is-disabled {
+        background-color: mix($--color-white, $--color-info, 60%);
+        border-color: mix($--color-white, $--color-info, 60%);
+        
+        .el-radio__label {
+          color: $--color-white;
+        }
+        
+        &.is-checked {
+          background-color: mix($--color-white, $--color-primary, 60%);
+          border-color: mix($--color-white, $--color-primary, 60%);
+        }
       }
     }
   }
@@ -161,8 +244,8 @@
     }
 
     &::after {
-      width: 4px;
-      height: 4px;
+      width: 8px;
+      height: 8px;
       border-radius: $--radio-input-border-radius;
       background-color: $--color-white;
       content: "";
@@ -194,6 +277,6 @@
 
   @include e(label) {
     font-size: $--radio-font-size;
-    padding-left: 10px;
+    padding-left: 4px;
   }
 }

@@ -29,14 +29,14 @@
 
   &:hover,
   &:focus {
-    color: $--color-primary;
-    border-color: $--color-primary-light-7;
-    background-color: $--color-primary-light-9;
+    color: mix($--color-white, $--color-primary, 25%);
+    border-color: mix($--color-white, $--color-primary, 25%);
+    background-color: mix($--color-white, mix($--color-white, $--color-primary, 25%), 90%);
   }
 
   &:active {
-    color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-    border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+    color: mix($--button-active-mix-color, $--color-primary, $--button-active-mix-percent);
+    border-color: mix($--button-active-mix-color, $--color-primary, $--button-active-mix-percent);
     outline: none;
   }
 
@@ -51,24 +51,26 @@
   }
 
   @include when(plain) {
+    border-color: transparent;
+    
     &:hover,
     &:focus {
       background: $--color-white;
-      border-color: $--color-primary;
-      color: $--color-primary;
+      border-color: transparent;
+      color: mix($--color-white, $--color-primary, 25%);
     }
 
     &:active {
       background: $--color-white;
-      border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-      color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+      border-color: transparent;
+      color: mix($--button-active-mix-color, $--color-primary, $--button-active-mix-percent);
       outline: none;
     }
   }
 
   @include when(active) {
-    color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
-    border-color: mix($--color-black, $--color-primary, $--button-active-shade-percent);
+    color: mix($--button-active-mix-color, $--color-primary, $--button-active-mix-percent);
+    border-color: mix($--button-active-mix-color, $--color-primary, $--button-active-mix-percent);
   }
 
   @include when(disabled) {
@@ -91,7 +93,7 @@
       &:hover,
       &:focus {
         background-color: $--color-white;
-        border-color: $--button-disabled-border-color;
+        border-color: transparent;
         color: $--button-disabled-font-color;
       }
     }

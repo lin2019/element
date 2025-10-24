@@ -34,12 +34,17 @@
     &:focus {
       outline: none;
       border-color: $--input-focus-border;
+      background-color: $--input-focus-fill;
+
+      ~ .el-input__count {
+        background: $--color-white;
+      }
     }
   }
 
   & .el-input__count {
     color: $--color-info;
-    background: $--color-white;
+    background: $--color-light-white;
     position: absolute;
     font-size: 12px;
     bottom: 5px;
@@ -96,7 +101,7 @@
     font-size: 12px;
 
     .el-input__count-inner {
-      background: $--color-white;
+      background: $--color-light-white;
       line-height: initial;
       display: inline-block;
       padding: 0 5px;
@@ -135,6 +140,13 @@
     &:focus {
       outline: none;
       border-color: $--input-focus-border;
+      background-color: $--input-focus-fill;
+    }
+  }
+
+  &:focus-within {
+    .el-input__count-inner {
+      background-color: $--color-white;
     }
   }
 
@@ -187,6 +199,11 @@
     .el-input__inner {
       outline: none;
       border-color: $--input-focus-border;
+      background-color: $--input-focus-fill;
+    }
+
+    .el-input__count-inner {
+      background-color: $--color-white;
     }
   }
 

@@ -1,6 +1,6 @@
 {
-  "name": "element-ui",
-  "version": "2.15.14",
+  "name": "@yq-ui/code",
+  "version": "1.0.0",
   "description": "A Component Library for Vue.js.",
   "main": "lib/element-ui.common.js",
   "files": [
@@ -26,6 +26,7 @@
     "dist": "npm run clean && npm run build:file && npm run lint && webpack --config build/webpack.conf.js && webpack --config build/webpack.common.js && webpack --config build/webpack.component.js && npm run build:utils && npm run build:umd && npm run build:theme",
     "i18n": "node build/bin/i18n.js",
     "lint": "eslint src/**/* test/**/* packages/**/* build/**/* --quiet",
+    "lint:fix": "eslint src/**/* test/**/* packages/**/* build/**/* examples/**/* --fix",
     "pub": "npm run bootstrap && sh build/git-release.sh && sh build/release.sh && node build/bin/gen-indices.js",
     "test": "npm run lint && npm run build:theme && cross-env CI_ENV=/dev/ BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test:watch": "npm run build:theme && cross-env BABEL_ENV=test karma start test/unit/karma.conf.js"
@@ -63,11 +64,14 @@
   "web-types": "./web-types.json",
   "dependencies": {
     "async-validator": "~1.8.1",
+    "axios": "^1.12.2",
     "babel-helper-vue-jsx-merge-props": "^2.0.0",
     "deepmerge": "^1.2.0",
+    "echarts": "^6.0.0",
     "normalize-wheel": "^1.0.1",
     "resize-observer-polyfill": "^1.5.0",
-    "throttle-debounce": "^1.0.1"
+    "throttle-debounce": "^1.0.1",
+    "xss": "^1.0.14"
   },
   "peerDependencies": {
     "vue": "^2.5.17"
@@ -147,5 +151,6 @@
     "webpack-cli": "^3.0.8",
     "webpack-dev-server": "^3.1.11",
     "webpack-node-externals": "^1.7.2"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }

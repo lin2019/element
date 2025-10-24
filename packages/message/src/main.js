@@ -75,7 +75,7 @@ Message.close = function(id, userOnClose) {
     }
   }
   if (len <= 1 || index === -1 || index > instances.length - 1) return;
-  for (let i = index; i < len - 1 ; i++) {
+  for (let i = index; i < len - 1; i++) {
     let dom = instances[i].$el;
     dom.style['top'] =
       parseInt(dom.style['top'], 10) - removedHeight - 16 + 'px';

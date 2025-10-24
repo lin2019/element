@@ -1,0 +1,366 @@
+{
+  "zh-CN": [
+    {
+      "name": "工具",
+      "groups": [
+        {
+          "groupName": "HTTP",
+          "list": [
+            {
+              "path": "/util-http",
+              "title": "HTTP请求"
+            },
+            {
+              "path": "/util-http-loading",
+              "title": "Loading控制"
+            },
+            {
+              "path": "/util-http-get",
+              "title": "GET"
+            },
+            {
+              "path": "/util-http-post",
+              "title": "POST"
+            },
+            {
+              "path": "/util-http-export",
+              "title": "exportCall"
+            },
+            {
+              "path": "/util-http-dao",
+              "title": "daoCall"
+            },
+            {
+              "path": "/util-http-remote",
+              "title": "remoteCall"
+            },
+            {
+              "path": "/util-http-table",
+              "title": "tableCall"
+            }
+          ]
+        },
+        {
+          "groupName": "自定义指令",
+          "list": [
+            {
+              "path": "/v-permission",
+              "title": "v-permission"
+            },
+            {
+              "path": "/v-debounce",
+              "title": "v-debounce"
+            },
+            {
+              "path": "/v-throttle",
+              "title": "v-throttle"
+            },
+            {
+              "path": "/v-copy",
+              "title": "v-copy"
+            },
+            {
+              "path": "/v-longpress",
+              "title": "v-longpress"
+            },
+            {
+              "path": "/v-draggable",
+              "title": "v-draggable"
+            }
+          ]
+        },
+        {
+          "groupName": "弹窗方法",
+          "list": [
+            {
+              "path": "/util-popup",
+              "title": "Popup方法"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/util-tools",
+              "title": "Common Tools 通用工具"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "en-US": [
+    {
+      "name": "Utils",
+      "groups": [
+        {
+          "groupName": "HTTP",
+          "list": [
+            {
+              "path": "/util-http",
+              "title": "HTTP Requests"
+            },
+            {
+              "path": "/util-http-loading",
+              "title": "Loading"
+            },
+            {
+              "path": "/util-http-get",
+              "title": "GET"
+            },
+            {
+              "path": "/util-http-post",
+              "title": "POST"
+            },
+            {
+              "path": "/util-http-export",
+              "title": "exportCall"
+            },
+            {
+              "path": "/util-http-dao",
+              "title": "daoCall"
+            },
+            {
+              "path": "/util-http-remote",
+              "title": "remoteCall"
+            },
+            {
+              "path": "/util-http-table",
+              "title": "tableCall"
+            }
+          ]
+        },
+        {
+          "groupName": "Custom Directives",
+          "list": [
+            {
+              "path": "/v-permission",
+              "title": "v-permission"
+            },
+            {
+              "path": "/v-debounce",
+              "title": "v-debounce"
+            },
+            {
+              "path": "/v-throttle",
+              "title": "v-throttle"
+            },
+            {
+              "path": "/v-copy",
+              "title": "v-copy"
+            },
+            {
+              "path": "/v-longpress",
+              "title": "v-longpress"
+            },
+            {
+              "path": "/v-draggable",
+              "title": "v-draggable"
+            }
+          ]
+        },
+        {
+          "groupName": "Popup Methods",
+          "list": [
+            {
+              "path": "/util-popup",
+              "title": "Popup Methods"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/util-tools",
+              "title": "Common Tools"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "es": [
+    {
+      "name": "Utils",
+      "groups": [
+        {
+          "groupName": "HTTP",
+          "list": [
+            {
+              "path": "/util-http",
+              "title": "HTTP Requests"
+            },
+            {
+              "path": "/util-http-loading",
+              "title": "Loading"
+            },
+            {
+              "path": "/util-http-get",
+              "title": "GET"
+            },
+            {
+              "path": "/util-http-post",
+              "title": "POST"
+            },
+            {
+              "path": "/util-http-export",
+              "title": "exportCall"
+            },
+            {
+              "path": "/util-http-dao",
+              "title": "daoCall"
+            },
+            {
+              "path": "/util-http-remote",
+              "title": "remoteCall"
+            },
+            {
+              "path": "/util-http-table",
+              "title": "tableCall"
+            }
+          ]
+        },
+        {
+          "groupName": "Custom Directives",
+          "list": [
+            {
+              "path": "/v-permission",
+              "title": "v-permission"
+            },
+            {
+              "path": "/v-debounce",
+              "title": "v-debounce"
+            },
+            {
+              "path": "/v-throttle",
+              "title": "v-throttle"
+            },
+            {
+              "path": "/v-copy",
+              "title": "v-copy"
+            },
+            {
+              "path": "/v-longpress",
+              "title": "v-longpress"
+            },
+            {
+              "path": "/v-draggable",
+              "title": "v-draggable"
+            }
+          ]
+        },
+        {
+          "groupName": "Popup Methods",
+          "list": [
+            {
+              "path": "/util-popup",
+              "title": "Popup Methods"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/util-tools",
+              "title": "Common Tools"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fr-FR": [
+    {
+      "name": "Utils",
+      "groups": [
+        {
+          "groupName": "HTTP",
+          "list": [
+            {
+              "path": "/util-http",
+              "title": "HTTP Requests"
+            },
+            {
+              "path": "/util-http-loading",
+              "title": "Loading"
+            },
+            {
+              "path": "/util-http-get",
+              "title": "GET"
+            },
+            {
+              "path": "/util-http-post",
+              "title": "POST"
+            },
+            {
+              "path": "/util-http-export",
+              "title": "exportCall"
+            },
+            {
+              "path": "/util-http-dao",
+              "title": "daoCall"
+            },
+            {
+              "path": "/util-http-remote",
+              "title": "remoteCall"
+            },
+            {
+              "path": "/util-http-table",
+              "title": "tableCall"
+            }
+          ]
+        },
+        {
+          "groupName": "Custom Directives",
+          "list": [
+            {
+              "path": "/v-permission",
+              "title": "v-permission"
+            },
+            {
+              "path": "/v-debounce",
+              "title": "v-debounce"
+            },
+            {
+              "path": "/v-throttle",
+              "title": "v-throttle"
+            },
+            {
+              "path": "/v-copy",
+              "title": "v-copy"
+            },
+            {
+              "path": "/v-longpress",
+              "title": "v-longpress"
+            },
+            {
+              "path": "/v-draggable",
+              "title": "v-draggable"
+            }
+          ]
+        },
+        {
+          "groupName": "Popup Methods",
+          "list": [
+            {
+              "path": "/util-popup",
+              "title": "Popup Methods"
+            }
+          ]
+        },
+        {
+          "groupName": "Tools",
+          "list": [
+            {
+              "path": "/util-tools",
+              "title": "Common Tools"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

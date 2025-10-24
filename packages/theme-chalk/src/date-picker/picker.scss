@@ -47,7 +47,7 @@
   .el-range__icon {
     font-size: 14px;
     margin-left: -5px;
-    color: $--color-text-placeholder;
+    color: $--color-text-regular;
     float: left;
     line-height: 32px;
   }
@@ -64,6 +64,7 @@
     text-align: center;
     font-size: $--font-size-base;
     color: $--color-text-regular;
+    background-color: transparent;
 
     &::placeholder {
       color: $--color-text-placeholder;
@@ -84,7 +85,7 @@
 
   .el-range__close-icon {
     font-size: 14px;
-    color: $--color-text-placeholder;
+    color: $--color-text-regular;
     width: 25px;
     display: inline-block;
     float: right;
@@ -105,6 +106,7 @@
 
   @include when(active) {
     border-color: $--color-primary;
+    background-color: $--input-focus-fill;
 
     &:hover {
       border-color: $--color-primary;

@@ -211,7 +211,14 @@
         if (val.img || val.isEmpty) return;
         const component = val.component || '';
         const anchor = val.anchor;
-        this.$router.push(`/${ this.lang }/component/${ component }${ anchor ? `#${ anchor }` : '' }`);
+        // 判断文档类型，支持 util 和 charts
+        let basePath = 'component';
+        if (component.startsWith('util-')) {
+          basePath = 'util';
+        } else if (component === 'charts' || component.startsWith('charts-')) {
+          basePath = 'charts';
+        }
+        this.$router.push(`/${ this.lang }/${ basePath }/${ component }${ anchor ? `#${ anchor }` : '' }`);
       }
     },
 

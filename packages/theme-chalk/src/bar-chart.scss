@@ -1,0 +1,8 @@
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(bar-chart) {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}

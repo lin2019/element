@@ -2,6 +2,7 @@ src/utils/popper.js
 src/utils/date.js
 src/utils/lodash.js
 examples/play
+examples/element-ui
 *.sh
 node_modules
 lib

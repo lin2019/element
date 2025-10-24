@@ -25,8 +25,8 @@
     "header": {
       "guide": "指南",
       "components": "组件",
-      "theme": "主题",
-      "resource": "资源"
+      "util": "Util",
+      "charts": "图表"
     },
     "nav": {
       "dropdown": "版本："
@@ -58,8 +58,8 @@
     "header": {
       "guide": "Guide",
       "components": "Component",
-      "theme": "Theme",
-      "resource": "Resource"
+      "util": "Util",
+      "charts": "Charts"
     },
     "nav": {
       "dropdown": "Version: "
@@ -91,8 +91,8 @@
     "header": {
       "guide": "Guía",
       "components": "Componentes",
-      "theme": "Theme",
-      "resource": "Recursos"
+      "util": "Util",
+      "charts": "Gráficos"
     },
     "nav": {
       "dropdown": "Versión: "
@@ -124,8 +124,8 @@
     "header": {
       "guide": "Guide",
       "components": "Composants",
-      "theme": "Theme",
-      "resource": "Ressources"
+      "util": "Util",
+      "charts": "Graphiques"
     },
     "nav": {
       "dropdown": "Version: "

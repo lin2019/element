@@ -106,6 +106,12 @@
       display: none;
     }
 
+    .nav-logo-text {
+      color: #1989fa;
+      font-size: 24px;
+      white-space: nowrap;
+    }
+
     .nav-item {
       margin: 0;
       float: left;
@@ -283,7 +289,7 @@
 <template>
   <div class="headerWrapper">
     <div id="v3-banner" v-if="isHome">
-      <template v-if="lang === 'zh-CN'">
+      <!-- <template v-if="lang === 'zh-CN'">
         您正在浏览基于 Vue 2.x 的文档;
         <a href="https://element-plus.org/#/zh-CN">点击查看 Vue 3.x 版本。</a>
         饿了么开源了自研多端框架 MorJS，
@@ -292,7 +298,7 @@
       <template v-else>
         You’re browsing the documentation of Element UI for Vue 2.x version.
         <a href="https://element-plus.org">Click here</a> for Vue 3.x version
-      </template>
+      </template> -->
     </div>
     <header class="header" ref="header">
       <div class="container">
@@ -300,12 +306,15 @@
           <!-- logo -->
           <slot>
             <img
-              src="../assets/images/element-logo.svg"
+              src="../assets/images/yunqul-logo.svg"
               alt="element-logo"
+              style="height: 38px;"
               class="nav-logo">
+            <span class="nav-logo-text">云极</span>
             <img
-              src="../assets/images/element-logo-small.svg"
+              src="../assets/images/yunqul-logo.svg"
               alt="element-logo"
+              style="height: 38px;"
               class="nav-logo-small">
           </slot>
 
@@ -328,19 +337,16 @@
               :to="`/${ lang }/component`">{{ langConfig.components }}
             </router-link>
           </li>
-          <li
-            class="nav-item nav-item-theme"
-          >
+          <li class="nav-item">
             <router-link
               active-class="active"
-              :to="`/${ lang }/theme`">{{ langConfig.theme }}
+              :to="`/${ lang }/util`">{{ langConfig.util }}
             </router-link>
           </li>
           <li class="nav-item">
             <router-link
               active-class="active"
-              :to="`/${ lang }/resource`"
-              exact>{{ langConfig.resource }}
+              :to="`/${ lang }/charts`">{{ langConfig.charts }}
             </router-link>
           </li>
 
@@ -447,7 +453,8 @@
         return compoLang.filter(config => config.lang === this.lang)[0]['header'];
       },
       isComponentPage() {
-        return /^component/.test(this.$route.name);
+        const routeName = this.$route.name || '';
+        return /^component/.test(routeName) || /^util-/.test(routeName) || /^charts/.test(routeName);
       },
       isHome() {
         return /^home/.test(this.$route.name);
