@@ -44,7 +44,7 @@ export const throttle = {
 export const copy = {
   bind(el, binding, vnode) {
     // 保存复制处理函数
-    el.$copyHandler = function () {
+    el.$copyHandler = function() {
       const text = binding.value;
 
       if (!text) {
@@ -79,7 +79,7 @@ export const copy = {
     }
 
     // 更新绑定值时更新处理函数
-    el.$copyHandler = function () {
+    el.$copyHandler = function() {
       const text = binding.value;
 
       if (!text) {
