@@ -5,7 +5,7 @@ Provides methods for opening, closing, and jumping between tabs, suitable for mu
 ### Import
 
 ```javascript
-import { popup } from 'element-ui/src/utils'
+import { popup } from 'yq-ui-code/lib/utils'
 
 // Or via yq namespace
 yq.popup.openTab(option)

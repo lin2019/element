@@ -5,7 +5,7 @@
 ### 引入方式
 
 ```javascript
-import { popup } from 'element-ui/src/utils'
+import { popup } from 'yq-ui-code/lib/utils'
 
 // 或通过 yq 命名空间
 yq.popup.openTab(option)

@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import Popup from 'element-ui/src/utils/popup';
-import emitter from 'element-ui/src/mixins/emitter';
+import Popup from 'yq-ui-code/src/utils/popup';
+import emitter from 'yq-ui-code/src/mixins/emitter';
 
 export default {
   name: 'ElDrawer',

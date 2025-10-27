@@ -5,7 +5,7 @@ Proporciona métodos para abrir, cerrar y saltar entre pestañas.
 ### Importar
 
 ```javascript
-import { popup } from 'element-ui/src/utils'
+import { popup } from 'yq-ui-code/lib/utils'
 
 // O mediante el espacio de nombres yq
 yq.popup.openTab(option)

@@ -1,5 +1,5 @@
 import DescriptionsRow from './descriptions-row';
-import { isFunction } from 'element-ui/src/utils/types';
+import { isFunction } from 'yq-ui-code/src/utils/types';
 
 export default {
   name: 'ElDescriptions',

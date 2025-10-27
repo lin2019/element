@@ -5,16 +5,15 @@ Provides commonly used utility functions, including date processing, data format
 ### Basic Usage
 
 ```javascript
-import { tools } from 'element-ui/src/utils';
+import { tools } from 'yq-ui-code/lib/utils'
 
 // Date formatting
-tools.formatDate(new Date(), 'YYYY-MM-DD');
+tools.formatDate(new Date(), 'YYYY-MM-DD')
 
 // Deep clone
-tools.deepClone(obj);
+tools.deepClone(obj)
 ```
 
 ### Documentation
 
 Full documentation coming soon. Please refer to the Chinese version for now.
-

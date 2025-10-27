@@ -402,7 +402,7 @@ methods: {
 如果组件包含文本，应支持国际化：
 
 ```javascript
-import { t } from 'element-ui/src/locale';
+import { t } from 'yq-ui-code/src/locale';
 
 export default {
   computed: {

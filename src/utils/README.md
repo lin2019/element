@@ -18,7 +18,7 @@ src/utils/
 ### 完整引入
 
 ```javascript
-import utils from 'element-ui/src/utils'
+import utils from 'yq-ui-code/src/utils'
 
 // 使用HTTP请求
 utils.http.get('/api/data')
@@ -33,7 +33,7 @@ utils.popup.open({ path: '/home', name: '首页' })
 ### 按需引入
 
 ```javascript
-import { http, tools, tabManager, directives } from 'element-ui/src/utils'
+import { http, tools, tabManager, directives } from 'yq-ui-code/src/utils'
 
 // HTTP请求
 http.get('/api/data')

@@ -90,13 +90,13 @@ import Descriptions from '../packages/descriptions/index.js';
 import DescriptionsItem from '../packages/descriptions-item/index.js';
 import Result from '../packages/result/index.js';
 import BarChart from '../packages/bar-chart/index.js';
-import locale from 'element-ui/src/locale';
-import CollapseTransition from 'element-ui/src/transitions/collapse-transition';
+import locale from 'yq-ui-code/src/locale';
+import CollapseTransition from 'yq-ui-code/src/transitions/collapse-transition';
 
 // 导入 yq 工具函数，会自动挂载到 window.yq
 import './utils/index.js';
 // 导入自定义指令
-import directives from 'element-ui/src/utils/custom-directives';
+import directives from 'yq-ui-code/src/utils/custom-directives';
 
 const components = [
   Pagination,
@@ -224,7 +224,7 @@ if (typeof window !== 'undefined' && window.Vue) {
 }
 
 export default {
-  version: '1.0.0',
+  version: '1.0.1',
   locale: locale.use,
   i18n: locale.i18n,
   install,

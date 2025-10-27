@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import ElPopover from 'element-ui/packages/popover';
-import ElButton from 'element-ui/packages/button';
-import {t} from 'element-ui/src/locale';
+import ElPopover from 'yq-ui-code/packages/popover';
+import ElButton from 'yq-ui-code/packages/button';
+import {t} from 'yq-ui-code/src/locale';
 
 export default {
   name: 'ElPopconfirm',

@@ -7,10 +7,10 @@ HTTP request utility based on axios, supporting request interception, response i
 #### NPM Installation
 
 ```javascript
-import yq from 'element-ui/src/utils'
+import yq from 'yq-ui-code/lib/utils'
 
 // or import on demand
-import { yq } from 'element-ui/src/utils'
+import { yq } from 'yq-ui-code/lib/utils'
 ```
 
 #### CDN

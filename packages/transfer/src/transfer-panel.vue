@@ -52,10 +52,10 @@
 </template>
 
 <script>
-  import ElCheckboxGroup from 'element-ui/packages/checkbox-group';
-  import ElCheckbox from 'element-ui/packages/checkbox';
-  import ElInput from 'element-ui/packages/input';
-  import Locale from 'element-ui/src/mixins/locale';
+  import ElCheckboxGroup from 'yq-ui-code/packages/checkbox-group';
+  import ElCheckbox from 'yq-ui-code/packages/checkbox';
+  import ElInput from 'yq-ui-code/packages/input';
+  import Locale from 'yq-ui-code/src/mixins/locale';
 
   export default {
     mixins: [Locale],

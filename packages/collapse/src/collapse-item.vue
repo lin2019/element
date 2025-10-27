@@ -45,9 +45,9 @@
   </div>
 </template>
 <script>
-  import ElCollapseTransition from 'element-ui/src/transitions/collapse-transition';
-  import Emitter from 'element-ui/src/mixins/emitter';
-  import { generateId } from 'element-ui/src/utils/util';
+  import ElCollapseTransition from 'yq-ui-code/src/transitions/collapse-transition';
+  import Emitter from 'yq-ui-code/src/mixins/emitter';
+  import { generateId } from 'yq-ui-code/src/utils/util';
 
   export default {
     name: 'ElCollapseItem',

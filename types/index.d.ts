@@ -1,4 +1,4 @@
-export * from './element-ui'
+export * from './yq-ui-code'
 
-import * as ElementUI from './element-ui'
+import * as ElementUI from './yq-ui-code'
 export default ElementUI

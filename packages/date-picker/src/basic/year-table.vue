@@ -44,9 +44,9 @@
 </template>
 
 <script type="text/babel">
-  import { hasClass } from 'element-ui/src/utils/dom';
-  import { isDate, range, nextDate, getDayCountOfYear } from 'element-ui/src/utils/date-util';
-  import { arrayFindIndex, coerceTruthyValueToArray } from 'element-ui/src/utils/util';
+  import { hasClass } from 'yq-ui-code/src/utils/dom';
+  import { isDate, range, nextDate, getDayCountOfYear } from 'yq-ui-code/src/utils/date-util';
+  import { arrayFindIndex, coerceTruthyValueToArray } from 'yq-ui-code/src/utils/util';
 
   const datesInYear = year => {
     const numOfDays = getDayCountOfYear(year);

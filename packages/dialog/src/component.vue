@@ -38,9 +38,9 @@
 </template>
 
 <script>
-  import Popup from 'element-ui/src/utils/popup';
-  import Migrating from 'element-ui/src/mixins/migrating';
-  import emitter from 'element-ui/src/mixins/emitter';
+  import Popup from 'yq-ui-code/src/utils/popup';
+  import Migrating from 'yq-ui-code/src/mixins/migrating';
+  import emitter from 'yq-ui-code/src/mixins/emitter';
 
   export default {
     name: 'ElDialog',

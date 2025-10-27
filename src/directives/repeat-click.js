@@ -1,5 +1,5 @@
-import { once, on } from 'element-ui/src/utils/dom';
-import { isMac } from 'element-ui/src/utils/util';
+import { once, on } from 'yq-ui-code/src/utils/dom';
+import { isMac } from 'yq-ui-code/src/utils/util';
 
 export default {
   bind(el, binding, vnode) {

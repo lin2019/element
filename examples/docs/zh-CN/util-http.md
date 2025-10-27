@@ -7,10 +7,10 @@
 #### NPM 安装引入
 
 ```javascript
-import yq from 'element-ui/src/utils'
+import yq from 'yq-ui-code/lib/utils'
 
 // 或者按需引入
-import { yq } from 'element-ui/src/utils'
+import { yq } from 'yq-ui-code/lib/utils'
 ```
 
 #### CDN 引入
@@ -18,13 +18,13 @@ import { yq } from 'element-ui/src/utils'
 通过 CDN 引入时，`yq` 对象会自动挂载到 `window` 对象上，可以直接使用。
 
 ```html
-<!-- 引入 Element UI (包含 yq 工具) -->
-<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+<!-- 引入 yq-ui-code (包含 yq 工具) -->
+<link rel="stylesheet" href="https://unpkg.com/yq-ui-code/lib/theme-chalk/index.css" />
 <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/yq-ui-code/lib/index.js"></script>
 
 <!-- 或使用自己的CDN地址 -->
-<script src="your-cdn-path/element-ui.js"></script>
+<script src="your-cdn-path/yq-ui-code.js"></script>
 
 <script>
   // 直接使用 yq 对象

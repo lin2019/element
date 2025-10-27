@@ -1,9 +1,9 @@
-import { kebabCase } from 'element-ui/src/utils/util';
+import { kebabCase } from 'yq-ui-code/src/utils/util';
 /**
  * Show migrating guide in browser console.
  *
  * Usage:
- * import Migrating from 'element-ui/src/mixins/migrating';
+ * import Migrating from 'yq-ui-code/src/mixins/migrating';
  *
  * mixins: [Migrating]
  *

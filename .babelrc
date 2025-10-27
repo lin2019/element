@@ -31,9 +31,10 @@
         [
           "module-resolver",
           {
-            "root": ["element-ui"],
+            "root": ["yq-ui-code"],
             "alias": {
-              "element-ui/src": "yq-ui-code/lib"
+              "yq-ui-code/src": "yq-ui-code/lib",
+              "yq-ui-code/packages": "yq-ui-code/lib"
             }
           }
         ]

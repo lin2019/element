@@ -215,7 +215,7 @@ export default {
 <html>
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css" />
+    <link rel="stylesheet" href="https://unpkg.com/yq-ui-code/lib/theme-chalk/index.css" />
   </head>
   <body>
     <div id="app">
@@ -228,7 +228,7 @@ export default {
     </div>
 
     <script src="https://unpkg.com/vue@2/dist/vue.js"></script>
-    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/yq-ui-code/lib/index.js"></script>
 
     <script>
       new Vue({

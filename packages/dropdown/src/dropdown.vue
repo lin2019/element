@@ -1,10 +1,10 @@
 <script>
-  import Clickoutside from 'element-ui/src/utils/clickoutside';
-  import Emitter from 'element-ui/src/mixins/emitter';
-  import Migrating from 'element-ui/src/mixins/migrating';
-  import ElButton from 'element-ui/packages/button';
-  import ElButtonGroup from 'element-ui/packages/button-group';
-  import { generateId } from 'element-ui/src/utils/util';
+  import Clickoutside from 'yq-ui-code/src/utils/clickoutside';
+  import Emitter from 'yq-ui-code/src/mixins/emitter';
+  import Migrating from 'yq-ui-code/src/mixins/migrating';
+  import ElButton from 'yq-ui-code/packages/button';
+  import ElButtonGroup from 'yq-ui-code/packages/button-group';
+  import { generateId } from 'yq-ui-code/src/utils/util';
 
   export default {
     name: 'ElDropdown',

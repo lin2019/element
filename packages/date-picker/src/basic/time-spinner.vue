@@ -101,9 +101,9 @@
 </template>
 
 <script type="text/babel">
-  import { getRangeHours, getRangeMinutes, modifyTime } from 'element-ui/src/utils/date-util';
-  import ElScrollbar from 'element-ui/packages/scrollbar';
-  import RepeatClick from 'element-ui/src/directives/repeat-click';
+  import { getRangeHours, getRangeMinutes, modifyTime } from 'yq-ui-code/src/utils/date-util';
+  import ElScrollbar from 'yq-ui-code/packages/scrollbar';
+  import RepeatClick from 'yq-ui-code/src/directives/repeat-click';
 
   export default {
     components: { ElScrollbar },

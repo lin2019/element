@@ -28,7 +28,7 @@
 </template>
 
 <script>
-  import ElTooltip from 'element-ui/packages/tooltip';
+  import ElTooltip from 'yq-ui-code/packages/tooltip';
 
   export default {
     name: 'ElSliderButton',

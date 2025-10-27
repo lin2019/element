@@ -5,7 +5,7 @@ Fournit des méthodes pour ouvrir, fermer et naviguer entre les onglets.
 ### Importer
 
 ```javascript
-import { popup } from 'element-ui/src/utils'
+import { popup } from 'yq-ui-code/lib/utils'
 
 // Ou via l'espace de noms yq
 yq.popup.openTab(option)
