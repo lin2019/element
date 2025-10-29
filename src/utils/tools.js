@@ -1105,12 +1105,12 @@ export function fileToBase64(file) {
     return Promise.reject(new Error('Invalid file'));
   }
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const reader = new FileReader();
-    reader.onload = function () {
+    reader.onload = function() {
       resolve(reader.result);
     };
-    reader.onerror = function (error) {
+    reader.onerror = function(error) {
       reject(error);
     };
     reader.readAsDataURL(file);
@@ -1228,12 +1228,12 @@ export function readFileAsText(file, encoding = 'UTF-8') {
     return Promise.reject(new Error('Invalid file'));
   }
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const reader = new FileReader();
-    reader.onload = function () {
+    reader.onload = function() {
       resolve(reader.result);
     };
-    reader.onerror = function (error) {
+    reader.onerror = function(error) {
       reject(error);
     };
     reader.readAsText(file, encoding);
@@ -1665,9 +1665,9 @@ export function generateToken(length = 32) {
  */
 export function debounceFunc(func, wait = 300, immediate = false) {
   let timeout;
-  return function (...args) {
+  return function(...args) {
     const context = this;
-    const later = function () {
+    const later = function() {
       timeout = null;
       if (!immediate) func.apply(context, args);
     };
@@ -1689,14 +1689,14 @@ export function throttleFunc(func, wait = 300, options = {}) {
   let timeout, context, args, result;
   let previous = 0;
 
-  const later = function () {
+  const later = function() {
     previous = options.leading === false ? 0 : Date.now();
     timeout = null;
     result = func.apply(context, args);
     if (!timeout) context = args = null;
   };
 
-  return function (...params) {
+  return function(...params) {
     const now = Date.now();
     if (!previous && options.leading === false) previous = now;
     const remaining = wait - (now - previous);
@@ -1785,7 +1785,7 @@ export function toClipboard(text) {
     }
   }
   // eslint-disable-next-line no-undef
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     try {
       const textarea = document.createElement('textarea');
       textarea.value = s;

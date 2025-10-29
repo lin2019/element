@@ -64,7 +64,7 @@ export const auth = {
               // resp 形态可能是数组：[{ id1: 'Y' }, { id2: 'N' }]
               // 或对象：{ id1: 'Y', id2: 'N' }
               if (Array.isArray(resp)) {
-                resp.forEach(function (item) {
+                resp.forEach(function(item) {
                   const key = item && Object.keys(item)[0];
                   if (key && item[key] === 'Y') {
                     ctx.$set ? ctx.$set(ctx[containerName], key, 'Y') : (ctx[containerName][key] = 'Y');
@@ -125,7 +125,7 @@ export const debounce = {
     }
 
     let timer = null;
-    const debounced = function (...args) {
+    const debounced = function(...args) {
       if (timer) clearTimeout(timer);
       if (immediate && !timer) {
         handler.apply(this, args);
@@ -162,7 +162,7 @@ export const throttle = {
     let lastCallTime = 0;
     let timer = null;
 
-    const throttled = function (...args) {
+    const throttled = function(...args) {
       const now = Date.now();
 
       if (!lastCallTime && !leading) {
@@ -200,7 +200,7 @@ export const throttle = {
 export const copy = {
   bind(el, binding, vnode) {
     // 保存复制处理函数
-    el.$copyHandler = function () {
+    el.$copyHandler = function() {
       const text = binding.value;
 
       if (!text) {
@@ -235,7 +235,7 @@ export const copy = {
     }
 
     // 更新绑定值时更新处理函数
-    el.$copyHandler = function () {
+    el.$copyHandler = function() {
       const text = binding.value;
 
       if (!text) {

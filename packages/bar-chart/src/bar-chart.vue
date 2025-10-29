@@ -1,234 +1,317 @@
 <template>
-  <div class="el-bar-chart" :style="{ width: width, height: height }">
-    <div ref="chartContainer" :style="{ width: '100%', height: '100%' }"></div>
+  <div class="base-bar-chart" :style="{ width: finalConfig.width, height: finalConfig.height }">
+    <!-- 动态组件，根据 type 自动切换 -->
+    <component :is="currentComponent" :config="config" :baseConfig="mergedBaseConfig" :baseOptions="chartOptions" ref="chartComponent" />
   </div>
 </template>
 
 <script>
-import * as echarts from 'echarts';
+import BaseBar from './variants/base.vue';
+import TaperBar from './variants/taper.vue';
+import StackBar from './variants/stack.vue';
+import BidirectionalBar from './variants/bidirectional.vue';
+import BarLine from './variants/bar-line.vue';
+import ThreeDBar from './variants/3d-bar.vue';
+
+import { colorToRgba } from '../../utils/chart_utils';
+import { ConfigManager } from './core/ConfigManager';
+import chartConfig from '../../mixins/chartConfig.js';
+import echarts from '../../utils/echarts';
 
 export default {
   name: 'ElBarChart',
+  mixins: [chartConfig],
+
+  components: {
+    BaseBar,
+    TaperBar,
+    StackBar,
+    BidirectionalBar,
+    BarLine,
+    ThreeDBar
+  },
 
   props: {
-    data: {
-      type: Array,
-      default: () => []
-    },
-    xField: {
+    // 预设模板
+    preset: {
       type: String,
-      required: true
-    },
-    yField: {
-      type: String,
-      default: ''
-    },
-    series: {
-      type: Array,
-      default: () => []
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '400px'
-    },
-    color: {
-      type: [Array, String],
-      default: () => ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399']
-    },
-    stack: {
-      type: Boolean,
-      default: false
-    },
-    borderRadius: {
-      type: Number,
-      default: 0
-    },
-    showLegend: {
-      type: Boolean,
-      default: true
-    },
-    legendPosition: {
-      type: String,
-      default: 'top',
-      validator: (value) => ['top', 'bottom', 'left', 'right'].includes(value)
-    },
-    title: {
-      type: String,
-      default: ''
-    },
-    subtitle: {
-      type: String,
-      default: ''
+      default: null
     }
+  },
+
+  provide() {
+    return {
+      // 提供渐变色生成方法给子组件
+      setLineGradientColor: this.createBarGradientColor
+    };
   },
 
   data() {
     return {
-      chart: null
+      configManager: null,
+      hasError: false,
+      errorMessage: ''
     };
   },
 
-  mounted() {
-    this.initChart();
-    window.addEventListener('resize', this.handleResize);
-  },
-
-  beforeDestroy() {
-    if (this.chart) {
-      this.chart.dispose();
-    }
-    window.removeEventListener('resize', this.handleResize);
-  },
-
-  watch: {
-    data: {
-      handler() {
-        this.updateChart();
-      },
-      deep: true
-    },
-    series: {
-      handler() {
-        this.updateChart();
-      },
-      deep: true
-    }
-  },
-
-  methods: {
-    initChart() {
-      this.chart = echarts.init(this.$refs.chartContainer);
-      this.updateChart();
-      // 绑定事件
-      this.chart.on('click', (params) => {
-        this.$emit('click', params, this.data[params.dataIndex]);
-      });
-
-      this.chart.on('mouseover', (params) => {
-        this.$emit('hover', params, this.data[params.dataIndex]);
-      });
-
-      this.chart.on('legendselectchanged', (params) => {
-        this.$emit('legend-click', params, params.name);
-      });
+  computed: {
+    /**
+     * 合并后的基础配置
+     */
+    mergedBaseConfig() {
+      return {
+        ...this.baseConfig,
+        mlColor3d: this.config.mlColor3d || false
+      };
     },
 
-    updateChart() {
-      if (!this.chart) return;
-
-      const option = this.getChartOption();
-      this.chart.setOption(option, true);
+    /**
+     * 最终配置（包含尺寸）
+     */
+    finalConfig() {
+      return {
+        width: this.config.width || this.baseConfig.width,
+        height: this.config.height || this.baseConfig.height
+      };
     },
 
-    getChartOption() {
-      const colors = Array.isArray(this.color) ? this.color : [this.color];
-
-      // 构建图表配置
-      const option = {
-        color: colors,
-        title: this.title
-          ? {
-            text: this.title,
-            subtext: this.subtitle,
-            left: 'center'
-          }
-          : undefined,
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
+    /**
+     * 图表选项（重命名自 options）
+     */
+    chartOptions() {
+      const options = {
+        ...this.chartAxisOptions,
+        ...this.baseOptions,
+        // 深拷贝 title 对象，避免多个组件实例共享
+        title: {
+          ...this.baseOptions.title
         },
-        legend:
-          this.showLegend && this.series.length > 0
-            ? {
-              data: this.series.map((s) => s.name),
-              [this.legendPosition]: this.legendPosition === 'top' || this.legendPosition === 'bottom' ? 10 : 20
-            }
-            : undefined,
+        // 深拷贝 grid 对象
         grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
+          ...this.baseOptions.grid
         },
+        // 深拷贝 dataZoom 数组
+        dataZoom: this.baseOptions.dataZoom ? this.baseOptions.dataZoom.map((item) => ({ ...item })) : []
+      };
+
+      // 配置标题
+      this.setupTitle(options);
+
+      // 配置滚动
+      this.setupScroll(options);
+
+      return options;
+    },
+
+    /**
+     * 坐标轴选项（每次调用返回新对象，避免共享引用）
+     */
+    chartAxisOptions() {
+      // 每次都返回全新的对象，避免组件实例间共享
+      return {
         xAxis: {
           type: 'category',
-          data: this.data.map((item) => item[this.xField]),
+          axisLabel: {
+            formatter: (value) => {
+              return value.length > 10 ? value.slice(0, 10) + '\n' + value.slice(10) : value;
+            }
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#868686',
+              width: 1,
+              type: 'solid'
+            }
+          },
           axisTick: {
             alignWithLabel: true
           }
         },
-        yAxis: {
-          type: 'value'
+        grid: {
+          bottom: '40px',
+          right: '26px',
+          left: '52px',
+          top: '70px'
         },
-        series: this.getSeriesData()
+        yAxis: {
+          type: 'value',
+          name: 'Y轴单位',
+          nameTextStyle: {
+            color: '#868686',
+            padding: [0, 0, 0, -50]
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: '#e8e8e8',
+              width: 1,
+              type: 'dashed'
+            }
+          }
+        },
+        dataZoom: [
+          {
+            show: false,
+            type: 'slider',
+            backgroundColor: '#F2F4F7',
+            fillerColor: '#E0E0E0',
+            borderColor: 'transparent',
+            borderCap: 'round',
+            showDetail: false,
+            startValue: 0,
+            endValue: 6,
+            height: 8,
+            left: 'center',
+            filterMode: 'filter',
+            showDataShadow: false,
+            handleStyle: {
+              color: 'rgba(27,90,169,1)',
+              borderWidth: 0,
+              opacity: 0
+            },
+            zoomLock: true,
+            handleSize: 0,
+            bottom: '10px'
+          },
+          {
+            type: 'inside',
+            zoomOnMouseWheel: false,
+            moveOnMouseMove: true,
+            moveOnMouseWheel: true
+          }
+        ]
       };
-
-      return option;
     },
 
-    getSeriesData() {
-      if (this.series.length > 0) {
-        // 多系列数据
-        return this.series.map((seriesItem, index) => ({
-          name: seriesItem.name,
-          type: 'bar',
-          stack: this.stack ? 'total' : undefined,
-          data: this.data.map((item) => item[seriesItem.field]),
-          itemStyle: {
-            color: seriesItem.color || (Array.isArray(this.color) ? this.color[index % this.color.length] : this.color),
-            borderRadius: this.borderRadius
-          }
-        }));
+    /**
+     * 根据 type 动态选择组件
+     */
+    currentComponent() {
+      const componentMap = {
+        base: 'BaseBar',
+        taper: 'TaperBar',
+        stack: 'StackBar',
+        bidirectional: 'BidirectionalBar',
+        'bar-line': 'BarLine',
+        '3d': 'ThreeDBar'
+      };
+      return componentMap[this.type] || 'BaseBar';
+    }
+  },
+
+  created() {
+    // 初始化配置管理器
+    this.configManager = new ConfigManager(this.config, this.preset);
+
+    // 验证配置
+    const validation = this.configManager.validate();
+    if (!validation.valid) {
+      console.error('[BaseBarChart] Configuration validation failed:', validation.errors);
+      this.hasError = true;
+      this.errorMessage = validation.errors.join('; ');
+    }
+  },
+
+  methods: {
+    /**
+     * 配置标题
+     */
+    setupTitle(options) {
+      if (this.config.showTitle) {
+        options.title.text = this.config.title;
+        options.title.show = true;
       } else {
-        // 单系列数据
-        return [
+        options.grid.top = '40px';
+        options.title.show = false;
+        options.title.text = '';
+      }
+    },
+
+    /**
+     * 配置滚动
+     */
+    setupScroll(options) {
+      if (this.config.scroll) {
+        options.dataZoom[0].show = true;
+        options.grid.height = '68%';
+        options.dataZoom[0].endValue = this.config.scrollPageNum || this.baseConfig.scrollPageNum;
+      } else {
+        options.dataZoom[0].show = false;
+      }
+    },
+
+    /**
+     * 创建柱状图渐变色（重命名自 setLineGradientColor）
+     */
+    createBarGradientColor(index, param, maxNum) {
+      if (!echarts) {
+        console.error('[BarChart] ECharts is not available');
+        return '#409EFF';
+      }
+
+      const color = (this.config.colors && this.config.colors[index]) || this.baseConfig.colors[index] || this.baseConfig.defaultColor;
+
+      const opacityConfig = this.baseConfig.colorOpacityConfig;
+
+      let colorStops = [
+        {
+          offset: 0,
+          color: colorToRgba(color, opacityConfig.end || 1)
+        },
+        {
+          offset: 1,
+          color: colorToRgba(color, opacityConfig.start || 0.5)
+        }
+      ];
+
+      // 如果显示数据边框
+      const showDataBorder = this.config.showDataBorder || this.baseConfig.showDataBorder;
+      if (showDataBorder) {
+        const borderColor = this.config.dataBorderColor || this.baseConfig.dataBorderColor;
+        colorStops = [
           {
-            type: 'bar',
-            data: this.data.map((item) => (this.yField ? item[this.yField] : Object.values(item).find((val) => typeof val === 'number'))),
-            itemStyle: {
-              color: (params) => {
-                const colors = Array.isArray(this.color) ? this.color : [this.color];
-                return colors[params.dataIndex % colors.length];
-              },
-              borderRadius: this.borderRadius
-            }
+            offset: 0,
+            color: colorToRgba(borderColor, 1)
+          },
+          {
+            offset: 0.01,
+            color: colorToRgba(borderColor, 1)
+          },
+          {
+            offset: 0.01,
+            color: colorToRgba(color, opacityConfig.end || 1)
+          },
+          {
+            offset: 1,
+            color: colorToRgba(color, opacityConfig.start || 0.5)
           }
         ];
       }
+
+      return new echarts.graphic.LinearGradient(0, 0, 0, 1, colorStops);
     },
 
-    handleResize() {
-      if (this.chart) {
-        this.chart.resize();
+    /**
+     * 更新配置（对外暴露的方法）
+     */
+    updateConfig() {
+      // 重新验证配置
+      this.configManager = new ConfigManager(this.config, this.preset);
+      const validation = this.configManager.validate();
+
+      if (validation.valid && this.$refs.chartComponent) {
+        this.$refs.chartComponent.updateChartData();
+      } else {
+        console.error('[BaseBarChart] Update failed:', validation.errors);
       }
     },
 
-    // 公共方法
-    resize() {
-      this.handleResize();
-    },
-
-    clear() {
-      if (this.chart) {
-        this.chart.clear();
-      }
-    },
-
-    getDataURL(type = 'png', pixelRatio = 1, backgroundColor = '#fff') {
-      if (this.chart) {
-        return this.chart.getDataURL({
-          type,
-          pixelRatio,
-          backgroundColor
-        });
-      }
-      return '';
+    /**
+     * 获取图表实例（对外暴露的方法）
+     */
+    getChartInstance() {
+      return this.$refs.chartComponent && this.$refs.chartComponent.chart;
     }
   }
 };

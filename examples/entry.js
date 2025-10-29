@@ -10,12 +10,16 @@ import MainHeader from './components/header';
 import SideNav from './components/side-nav';
 import FooterNav from './components/footer-nav';
 import title from './i18n/title';
+import * as echarts from 'echarts';
 
 import 'packages/theme-chalk/src/index.scss';
 import './demo-styles/index.scss';
 import './assets/styles/common.css';
 import './assets/styles/fonts/style.css';
 import icon from './icon.json';
+
+// 注册 ECharts 到 Vue 原型
+Vue.prototype.$echarts = echarts;
 
 Vue.use(Element);
 Vue.use(VueRouter);
@@ -33,7 +37,7 @@ Vue.mixin({
   computed: {
     $isEle: {
       get: () => (globalEle.$data.$isEle),
-      set: (data) => {globalEle.$data.$isEle = data;}
+      set: (data) => { globalEle.$data.$isEle = data; }
     }
   }
 });

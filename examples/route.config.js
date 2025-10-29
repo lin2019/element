@@ -5,26 +5,26 @@ const LOAD_MAP = {
   'zh-CN': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/zh-CN/${name}.vue`)),
-      'zh-CN');
+    'zh-CN');
   },
   'en-US': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/en-US/${name}.vue`)),
-      'en-US');
+    'en-US');
   },
   'es': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/es/${name}.vue`)),
-      'es');
+    'es');
   },
   'fr-FR': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/fr-FR/${name}.vue`)),
-      'fr-FR');
+    'fr-FR');
   }
 };
 
-const load = function (lang, path) {
+const load = function(lang, path) {
   return LOAD_MAP[lang](path);
 };
 
@@ -32,26 +32,26 @@ const LOAD_DOCS_MAP = {
   'zh-CN': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/zh-CN${path}.md`)),
-      'zh-CN');
+    'zh-CN');
   },
   'en-US': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/en-US${path}.md`)),
-      'en-US');
+    'en-US');
   },
   'es': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/es${path}.md`)),
-      'es');
+    'es');
   },
   'fr-FR': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/fr-FR${path}.md`)),
-      'fr-FR');
+    'fr-FR');
   }
 };
 
-const loadDocs = function (lang, path) {
+const loadDocs = function(lang, path) {
   return LOAD_DOCS_MAP[lang](path);
 };
 
@@ -105,7 +105,7 @@ const registerRoute = (navConfig) => {
 
 let route = registerRoute(navConfig);
 
-const generateMiscRoutes = function (lang) {
+const generateMiscRoutes = function(lang) {
   let guideRoute = {
     path: `/${lang}/guide`, // 指南
     redirect: `/${lang}/guide/design`,
