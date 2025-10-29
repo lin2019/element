@@ -46,7 +46,7 @@ tabManager.openTab({ path: '/home', name: '首页' })
 
 // 自定义指令
 // 在Vue中注册
-Vue.directive('permission', directives.permission)
+Vue.directive('auth', directives.auth)
 ```
 
 ## 功能模块
@@ -64,7 +64,7 @@ Vue.directive('permission', directives.permission)
 
 提供常用的 Vue 自定义指令：
 
-- `v-permission` - 权限控制
+- `v-auth` - 权限控制
 - `v-debounce` - 防抖
 - `v-throttle` - 节流
 - `v-copy` - 复制到剪贴板

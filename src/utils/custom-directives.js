@@ -4,13 +4,106 @@
  */
 
 /**
- * 权限指令
- * 用法: v-permission="['admin']"
- * 待实现
+ * 权限指令 v-auth
+ * 仅接受字符串：
+ *  - v-auth="a"（或 v-auth="'a'"）
+ *  - v-auth="a;b;"  // 分号分隔，允许末尾分号
+ *  - v-auth="a,b"    // 逗号分隔
+ * 兼容旧用法（批量回填，不控制显隐）：
+ *  - v-auth:[permissions]="'a;b;c;'"
  */
-export const permission = {
+export const auth = {
   inserted(el, binding) {
-    // 待实现：权限判断逻辑
+    try {
+      const vnode = arguments[2];
+      const raw = binding.value;
+
+      if (typeof raw !== 'string') {
+        console.warn('[v-auth] 仅接受字符串，例如 v-auth="a"、v-auth="a;b;" 或 v-auth="a,b"');
+        return;
+      }
+
+      // 支持分号与逗号作为分隔符，允许末尾分号
+      const idList = raw
+        .split(/[;,]/)
+        .map(s => s && s.trim())
+        .filter(Boolean);
+
+      if (!idList.length) {
+        console.warn('[v-auth] 缺少权限ID');
+        return;
+      }
+
+      const idsParam = idList.join(',');
+
+      if (typeof window === 'undefined' || !window.yq || !window.yq.remoteCall) {
+        console.error('[v-auth] yq.remoteCall 不可用');
+        return;
+      }
+
+      // 与历史接口保持一致
+      window.yq.remoteCall(`/cc-base/servlet/menu?action=checkRes&ids=${idsParam}`, {}, (data) => {
+        if (!(data && data.state === 1 && data.data)) {
+          console.error('获取权限失败》》》', data);
+          return;
+        }
+
+        const resp = data.data; // 可能是数组或对象集合
+
+        // 兼容带参数的老用法：v-auth:[permissions]="'id1;id2;'" 或 "'id1,id2'"
+        // 通过 rawName 中的 [xxx] 提取容器名，并回填到 this[xxx]
+        if (binding.arg) {
+          const regex = /\[(.*?)\]/;
+          const matches = binding.rawName && binding.rawName.match(regex);
+          if (matches && matches[1]) {
+            const containerName = matches[1];
+            const ctx = vnode && vnode.context;
+            if (ctx) {
+              if (!ctx[containerName]) ctx[containerName] = {};
+
+              // resp 形态可能是数组：[{ id1: 'Y' }, { id2: 'N' }]
+              // 或对象：{ id1: 'Y', id2: 'N' }
+              if (Array.isArray(resp)) {
+                resp.forEach(function (item) {
+                  const key = item && Object.keys(item)[0];
+                  if (key && item[key] === 'Y') {
+                    ctx.$set ? ctx.$set(ctx[containerName], key, 'Y') : (ctx[containerName][key] = 'Y');
+                  }
+                });
+              } else if (resp && typeof resp === 'object') {
+                Object.keys(resp).forEach((key) => {
+                  if (resp[key] === 'Y') {
+                    ctx.$set ? ctx.$set(ctx[containerName], key, 'Y') : (ctx[containerName][key] = 'Y');
+                  }
+                });
+              }
+            }
+          }
+          return; // arg 模式仅做回填，不控制元素显隐
+        }
+
+        // 普通模式：根据权限控制元素显隐
+        // 期望当存在任一 ID 为 'Y' 时保留，否则移除
+        let hasPermission = false;
+
+        if (Array.isArray(resp)) {
+          // 数组：取每项首个键值是否为 'Y'
+          hasPermission = resp.some((item) => {
+            const key = item && Object.keys(item)[0];
+            return key && item[key] === 'Y';
+          });
+        } else if (resp && typeof resp === 'object') {
+          // 对象：检查传入的 idList 中是否有 'Y'
+          hasPermission = idList.some((id) => resp[id] === 'Y');
+        }
+
+        if (!hasPermission && el && el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      });
+    } catch (err) {
+      console.error('[v-auth] 执行出错：', err);
+    }
   }
 };
 
@@ -21,7 +114,30 @@ export const permission = {
  */
 export const debounce = {
   inserted(el, binding) {
-    // 待实现：防抖逻辑
+    const handler = typeof binding.value === 'function' ? binding.value : (binding.value && binding.value.handler);
+    const wait = (binding.modifiers && binding.modifiers.immediate) ? 0 : ((binding.value && binding.value.wait) || 300);
+    const options = typeof binding.value === 'object' ? binding.value : {};
+    const immediate = !!options.immediate;
+
+    if (typeof handler !== 'function') {
+      console.warn('[v-debounce] 需要传入函数或 { handler, wait, immediate } 对象');
+      return;
+    }
+
+    let timer = null;
+    const debounced = function (...args) {
+      if (timer) clearTimeout(timer);
+      if (immediate && !timer) {
+        handler.apply(this, args);
+      }
+      timer = setTimeout(() => {
+        if (!immediate) handler.apply(this, args);
+        timer = null;
+      }, wait);
+    };
+
+    el.__debounce_handler__ = debounced;
+    el.addEventListener('click', debounced);
   }
 };
 
@@ -32,7 +148,47 @@ export const debounce = {
  */
 export const throttle = {
   inserted(el, binding) {
-    // 待实现：节流逻辑
+    const handler = typeof binding.value === 'function' ? binding.value : (binding.value && binding.value.handler);
+    const wait = (binding.value && binding.value.wait) || 300;
+    const options = typeof binding.value === 'object' ? binding.value : {};
+    const leading = options.leading !== undefined ? options.leading : true;
+    const trailing = options.trailing !== undefined ? options.trailing : true;
+
+    if (typeof handler !== 'function') {
+      console.warn('[v-throttle] 需要传入函数或 { handler, wait, leading, trailing } 对象');
+      return;
+    }
+
+    let lastCallTime = 0;
+    let timer = null;
+
+    const throttled = function (...args) {
+      const now = Date.now();
+
+      if (!lastCallTime && !leading) {
+        lastCallTime = now;
+      }
+
+      const remaining = wait - (now - lastCallTime);
+
+      if (remaining <= 0 || remaining > wait) {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+        lastCallTime = now;
+        handler.apply(this, args);
+      } else if (!timer && trailing) {
+        timer = setTimeout(() => {
+          lastCallTime = leading ? Date.now() : 0;
+          timer = null;
+          handler.apply(this, args);
+        }, remaining);
+      }
+    };
+
+    el.__throttle_handler__ = throttled;
+    el.addEventListener('click', throttled);
   }
 };
 
@@ -44,7 +200,7 @@ export const throttle = {
 export const copy = {
   bind(el, binding, vnode) {
     // 保存复制处理函数
-    el.$copyHandler = function() {
+    el.$copyHandler = function () {
       const text = binding.value;
 
       if (!text) {
@@ -79,7 +235,7 @@ export const copy = {
     }
 
     // 更新绑定值时更新处理函数
-    el.$copyHandler = function() {
+    el.$copyHandler = function () {
       const text = binding.value;
 
       if (!text) {
@@ -170,7 +326,61 @@ function triggerEvent(vnode, eventName, error) {
  */
 export const longpress = {
   bind(el, binding) {
-    // 待实现：长按事件逻辑
+    const handler = typeof binding.value === 'function' ? binding.value : (binding.value && binding.value.handler);
+    const duration = (binding.value && binding.value.duration) || 600; // 长按触发时间
+    const preventContextMenu = (binding.value && binding.value.preventContextMenu) !== false;
+
+    if (typeof handler !== 'function') {
+      console.warn('[v-longpress] 需要传入函数或 { handler, duration } 对象');
+      return;
+    }
+
+    let pressTimer = null;
+    let startX = 0;
+    let startY = 0;
+
+    const start = (e) => {
+      if (e.type === 'click' && e.button !== 0) return; // 仅左键
+      if (pressTimer === null) {
+        startX = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+        startY = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY) || 0;
+        pressTimer = setTimeout(() => {
+          handler(e);
+        }, duration);
+      }
+    };
+
+    const cancel = () => {
+      if (pressTimer !== null) {
+        clearTimeout(pressTimer);
+        pressTimer = null;
+      }
+    };
+
+    const moveCancel = (e) => {
+      const x = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || 0;
+      const y = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY) || 0;
+      if (Math.abs(x - startX) > 10 || Math.abs(y - startY) > 10) {
+        cancel();
+      }
+    };
+
+    el.__longpress_start__ = start;
+    el.__longpress_cancel__ = cancel;
+    el.__longpress_move_cancel__ = moveCancel;
+
+    el.addEventListener('mousedown', start);
+    el.addEventListener('touchstart', start);
+    el.addEventListener('click', cancel);
+    el.addEventListener('mouseout', cancel);
+    el.addEventListener('touchend', cancel);
+    el.addEventListener('touchcancel', cancel);
+    el.addEventListener('touchmove', moveCancel);
+
+    if (preventContextMenu) {
+      el.__longpress_contextmenu__ = (e) => e.preventDefault();
+      el.addEventListener('contextmenu', el.__longpress_contextmenu__);
+    }
   }
 };
 
@@ -473,7 +683,7 @@ export const dialogDrag = {
 
 // 导出所有指令
 export default {
-  permission,
+  auth,
   debounce,
   throttle,
   copy,

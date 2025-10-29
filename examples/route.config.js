@@ -5,26 +5,26 @@ const LOAD_MAP = {
   'zh-CN': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/zh-CN/${name}.vue`)),
-    'zh-CN');
+      'zh-CN');
   },
   'en-US': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/en-US/${name}.vue`)),
-    'en-US');
+      'en-US');
   },
   'es': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/es/${name}.vue`)),
-    'es');
+      'es');
   },
   'fr-FR': name => {
     return r => require.ensure([], () =>
       r(require(`./pages/fr-FR/${name}.vue`)),
-    'fr-FR');
+      'fr-FR');
   }
 };
 
-const load = function(lang, path) {
+const load = function (lang, path) {
   return LOAD_MAP[lang](path);
 };
 
@@ -32,26 +32,26 @@ const LOAD_DOCS_MAP = {
   'zh-CN': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/zh-CN${path}.md`)),
-    'zh-CN');
+      'zh-CN');
   },
   'en-US': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/en-US${path}.md`)),
-    'en-US');
+      'en-US');
   },
   'es': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/es${path}.md`)),
-    'es');
+      'es');
   },
   'fr-FR': path => {
     return r => require.ensure([], () =>
       r(require(`./docs/fr-FR${path}.md`)),
-    'fr-FR');
+      'fr-FR');
   }
 };
 
-const loadDocs = function(lang, path) {
+const loadDocs = function (lang, path) {
   return LOAD_DOCS_MAP[lang](path);
 };
 
@@ -105,7 +105,7 @@ const registerRoute = (navConfig) => {
 
 let route = registerRoute(navConfig);
 
-const generateMiscRoutes = function(lang) {
+const generateMiscRoutes = function (lang) {
   let guideRoute = {
     path: `/${lang}/guide`, // 指南
     redirect: `/${lang}/guide/design`,
@@ -202,10 +202,10 @@ const generateMiscRoutes = function(lang) {
         component: loadDocs(lang, '/util-http-table')
       },
       {
-        path: 'v-permission',
-        name: 'v-permission-' + lang,
+        path: 'v-auth',
+        name: 'v-auth-' + lang,
         meta: { lang },
-        component: loadDocs(lang, '/v-permission')
+        component: loadDocs(lang, '/v-auth')
       },
       {
         path: 'v-debounce',
@@ -248,6 +248,66 @@ const generateMiscRoutes = function(lang) {
         name: 'util-tools-' + lang,
         meta: { lang },
         component: loadDocs(lang, '/util-tools')
+      },
+      {
+        path: 'util-tools-core',
+        name: 'util-tools-core-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-core')
+      },
+      {
+        path: 'util-tools-datetime',
+        name: 'util-tools-datetime-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-datetime')
+      },
+      {
+        path: 'util-tools-url',
+        name: 'util-tools-url-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-url')
+      },
+      {
+        path: 'util-tools-dom',
+        name: 'util-tools-dom-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-dom')
+      },
+      {
+        path: 'util-tools-env',
+        name: 'util-tools-env-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-env')
+      },
+      {
+        path: 'util-tools-validate',
+        name: 'util-tools-validate-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-validate')
+      },
+      {
+        path: 'util-tools-file',
+        name: 'util-tools-file-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-file')
+      },
+      {
+        path: 'util-tools-format',
+        name: 'util-tools-format-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-format')
+      },
+      {
+        path: 'util-tools-storage',
+        name: 'util-tools-storage-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-storage')
+      },
+      {
+        path: 'util-tools-security',
+        name: 'util-tools-security-' + lang,
+        meta: { lang },
+        component: loadDocs(lang, '/util-tools-security')
       }
     ]
   };

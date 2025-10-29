@@ -44,8 +44,8 @@
           "groupName": "自定义指令",
           "list": [
             {
-              "path": "/v-permission",
-              "title": "v-permission"
+              "path": "/v-auth",
+              "title": "v-auth"
             },
             {
               "path": "/v-debounce",
@@ -82,8 +82,44 @@
           "groupName": "Tools",
           "list": [
             {
-              "path": "/util-tools",
-              "title": "Common Tools 通用工具"
+              "path": "/util-tools-core",
+              "title": "Core 基础类型与对象"
+            },
+            {
+              "path": "/util-tools-datetime",
+              "title": "Datetime 日期与时间"
+            },
+            {
+              "path": "/util-tools-url",
+              "title": "URL 与路由"
+            },
+            {
+              "path": "/util-tools-dom",
+              "title": "DOM 操作"
+            },
+            {
+              "path": "/util-tools-env",
+              "title": "Env 浏览器环境"
+            },
+            {
+              "path": "/util-tools-validate",
+              "title": "Validate 验证与正则"
+            },
+            {
+              "path": "/util-tools-file",
+              "title": "File 文件与数据"
+            },
+            {
+              "path": "/util-tools-format",
+              "title": "Format 格式化"
+            },
+            {
+              "path": "/util-tools-storage",
+              "title": "Storage 存储"
+            },
+            {
+              "path": "/util-tools-security",
+              "title": "Security 安全"
             }
           ]
         }
@@ -135,8 +171,8 @@
           "groupName": "Custom Directives",
           "list": [
             {
-              "path": "/v-permission",
-              "title": "v-permission"
+              "path": "/v-auth",
+              "title": "v-auth"
             },
             {
               "path": "/v-debounce",
@@ -226,8 +262,8 @@
           "groupName": "Custom Directives",
           "list": [
             {
-              "path": "/v-permission",
-              "title": "v-permission"
+              "path": "/v-auth",
+              "title": "v-auth"
             },
             {
               "path": "/v-debounce",
@@ -317,8 +353,8 @@
           "groupName": "Custom Directives",
           "list": [
             {
-              "path": "/v-permission",
-              "title": "v-permission"
+              "path": "/v-auth",
+              "title": "v-auth"
             },
             {
               "path": "/v-debounce",

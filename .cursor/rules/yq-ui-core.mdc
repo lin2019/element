@@ -1,0 +1,1224 @@
+---
+alwaysApply: true
+---
+
+# YQ-UI-CODE 项目开发规范
+
+## 📋 项目概述
+
+YQ-UI-CODE 是基于 Element UI 的 Vue 2.x 组件库，提供丰富的 UI 组件和工具函数。
+
+**技术栈：**
+- Vue 2.5.21
+- Webpack 4
+- Babel 6
+- SCSS / Node-sass
+- ESLint (elemefe config)
+- Karma + Mocha (单元测试)
+- TypeScript (类型定义)
+
+**关键依赖：**
+- echarts 6.0.0 (图表组件)
+- axios 1.12.2 (HTTP 请求)
+- async-validator (表单验证)
+- xss (XSS 防护)
+
+---
+
+## 📁 项目结构规范
+
+```
+yq-ui-code/
+├── packages/              # 组件源码（每个组件一个文件夹）
+│   └── [component-name]/
+│       ├── index.js      # 组件入口（导出并注册）
+│       └── src/
+│           └── main.vue  # 组件主文件
+├── src/                  # 核心工具和混入
+│   ├── utils/           # 工具函数集合
+│   ├── locale/          # 国际化
+│   ├── mixins/          # Vue 混入
+│   └── directives/      # 自定义指令
+├── lib/                 # 构建输出目录（自动生成）
+├── packages/theme-chalk/ # 样式源码（SCSS）
+│   └── src/
+│       ├── [component].scss  # 组件样式
+│       ├── common/var.scss   # 变量定义
+│       └── mixins/           # SCSS 混入
+├── examples/            # 文档和演示
+│   └── docs/
+│       ├── zh-CN/       # 中文文档
+│       ├── en-US/       # 英文文档
+│       ├── es/          # 西班牙语文档
+│       └── fr-FR/       # 法语文档
+├── test/unit/specs/     # 单元测试
+├── types/               # TypeScript 类型定义
+└── components.json      # 组件注册配置
+```
+
+---
+
+## 🎯 命名规范
+
+### 1. 文件和目录命名
+
+**组件名称：** 使用 `kebab-case`（短横线分隔）
+```bash
+✅ 正确：date-picker, bar-chart, button-group
+❌ 错误：DatePicker, datePicker, date_picker
+```
+
+**Vue 文件：** 使用 `kebab-case` 或 `PascalCase`
+```bash
+✅ 正确：main.vue, Button.vue
+❌ 错误：Main.Vue, BUTTON.vue
+```
+
+**JavaScript 文件：** 使用 `kebab-case`
+```bash
+✅ 正确：date-util.js, custom-directives.js
+❌ 错误：DateUtil.js, customDirectives.js
+```
+
+**SCSS 文件：** 使用 `kebab-case`
+```bash
+✅ 正确：button.scss, date-picker.scss
+❌ 错误：Button.scss, datePicker.scss
+```
+
+### 2. 代码命名
+
+**组件名（Vue component name）：** 使用 `El` 前缀 + `PascalCase`
+```javascript
+export default {
+  name: 'ElButton'  // ✅ 正确
+  // name: 'button'  // ❌ 错误
+}
+```
+
+**CSS 类名：** 遵循 BEM 规范，使用 `el-` 前缀
+```scss
+.el-button              // Block（块）
+.el-button__icon        // Element（元素）
+.el-button--primary     // Modifier（修饰符）
+.el-button.is-disabled  // State（状态）
+```
+
+**变量命名：**
+```javascript
+// JavaScript: camelCase
+const userName = 'admin';
+const isDisabled = false;
+
+// SCSS: kebab-case with $ prefix
+$--color-primary: #409EFF;
+$--button-padding-vertical: 12px;
+```
+
+**函数命名：**
+```javascript
+// 普通函数：camelCase
+function formatDate(date) { }
+
+// 事件处理器：handle + 动作
+handleClick(event) { }
+handleChange(value) { }
+
+// 布尔值判断：is/has/can/should + 形容词
+isValid() { }
+hasPermission() { }
+```
+
+**常量命名：** 使用 `UPPER_SNAKE_CASE`
+```javascript
+const MAX_COUNT = 100;
+const API_BASE_URL = '/api';
+```
+
+---
+
+## 🧩 组件开发规范
+
+### 1. 组件结构
+
+**标准模板：**
+```vue
+<template>
+  <div class="el-component-name">
+    <!-- 组件内容 -->
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ElComponentName',
+
+  // 组件关系
+  componentName: 'ElComponentName',
+  
+  // 依赖注入
+  inject: {
+    elForm: {
+      default: ''
+    }
+  },
+  
+  // 属性定义
+  props: {
+    type: {
+      type: String,
+      default: 'default',
+      validator: (value) => ['primary', 'success'].includes(value)
+    },
+    size: String,
+    disabled: Boolean
+  },
+  
+  // 数据
+  data() {
+    return {
+      currentValue: ''
+    };
+  },
+  
+  // 计算属性
+  computed: {
+    buttonSize() {
+      return this.size || (this.$ELEMENT || {}).size;
+    }
+  },
+  
+  // 侦听器
+  watch: {
+    value(val) {
+      this.currentValue = val;
+    }
+  },
+  
+  // 生命周期
+  mounted() { },
+  
+  // 方法
+  methods: {
+    handleClick(event) {
+      this.$emit('click', event);
+    }
+  }
+};
+</script>
+```
+
+### 2. Props 规范
+
+**完整定义：**
+```javascript
+props: {
+  // ✅ 好的写法：完整的类型、默认值、验证器
+  type: {
+    type: String,
+    default: 'default',
+    validator: (value) => ['primary', 'success', 'warning', 'danger'].includes(value)
+  },
+  
+  // ✅ 布尔值必须提供默认值
+  disabled: {
+    type: Boolean,
+    default: false
+  },
+  
+  // ✅ 对象/数组使用工厂函数
+  options: {
+    type: Array,
+    default: () => []
+  },
+  
+  // ❌ 避免：不完整的定义
+  size: String  // 缺少默认值
+}
+```
+
+### 3. 事件规范
+
+**事件命名：** 使用 `kebab-case`
+```javascript
+// ✅ 正确
+this.$emit('update:visible', false);
+this.$emit('item-click', item);
+
+// ❌ 错误
+this.$emit('updateVisible', false);
+this.$emit('itemClick', item);
+```
+
+**v-model 支持：**
+```javascript
+export default {
+  props: {
+    value: [String, Number]
+  },
+  methods: {
+    handleInput(newValue) {
+      this.$emit('input', newValue);      // v-model
+      this.$emit('change', newValue);     // 额外的 change 事件
+    }
+  }
+}
+```
+
+### 4. 组件注册流程
+
+**步骤 1：** 在 `packages/` 创建组件目录
+```bash
+packages/
+└── my-component/
+    ├── index.js
+    └── src/
+        └── main.vue
+```
+
+**步骤 2：** 编写 `index.js`
+```javascript
+import ElMyComponent from './src/main';
+
+/* istanbul ignore next */
+ElMyComponent.install = function(Vue) {
+  Vue.component(ElMyComponent.name, ElMyComponent);
+};
+
+export default ElMyComponent;
+```
+
+**步骤 3：** 在 `components.json` 注册
+```json
+{
+  "my-component": "./packages/my-component/index.js"
+}
+```
+
+**步骤 4：** 运行构建命令
+```bash
+npm run build:file
+```
+
+### 5. 国际化支持
+
+**使用 t() 函数：**
+```javascript
+import { t } from 'yq-ui-code/src/locale';
+
+export default {
+  computed: {
+    placeholder() {
+      return t('el.select.placeholder');
+    }
+  }
+}
+```
+
+---
+
+## 🎨 样式开发规范
+
+### 1. BEM 命名规范
+
+**使用 SCSS 混入：**
+```scss
+@import "mixins/mixins";
+@import "common/var";
+
+@include b(button) {
+  // .el-button
+  display: inline-block;
+  
+  @include e(icon) {
+    // .el-button__icon
+    margin-right: 5px;
+  }
+  
+  @include m(primary) {
+    // .el-button--primary
+    background-color: $--color-primary;
+  }
+  
+  @include when(disabled) {
+    // .el-button.is-disabled
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+```
+
+**BEM 语法：**
+- **Block（块）：** `.el-component`
+- **Element（元素）：** `.el-component__element`
+- **Modifier（修饰符）：** `.el-component--modifier`
+- **State（状态）：** `.el-component.is-active`
+
+### 2. 使用主题变量
+
+**引用变量而非硬编码：**
+```scss
+@import "common/var";
+
+@include b(card) {
+  // ✅ 使用变量
+  background-color: $--color-white;
+  border: 1px solid $--border-color-base;
+  border-radius: $--border-radius-base;
+  color: $--color-text-primary;
+  
+  // ❌ 避免硬编码
+  // background-color: #fff;
+  // border: 1px solid #ddd;
+}
+```
+
+**常用变量：**
+```scss
+// 颜色
+$--color-primary        // 主色
+$--color-success        // 成功色
+$--color-warning        // 警告色
+$--color-danger         // 危险色
+$--color-info           // 信息色
+
+// 文本
+$--color-text-primary   // 主要文本
+$--color-text-regular   // 常规文本
+$--color-text-secondary // 次要文本
+$--color-text-placeholder // 占位文本
+
+// 边框
+$--border-color-base
+$--border-color-light
+$--border-radius-base
+```
+
+### 3. 样式注册
+
+**在 `packages/theme-chalk/src/index.scss` 导入：**
+```scss
+@import "./my-component.scss";
+```
+
+---
+
+## 📝 文档编写规范
+
+### 1. 文档结构
+
+每个组件必须包含以下部分：
+
+```markdown
+## ComponentName 组件名称
+
+简要描述组件的用途和功能。
+
+:::tip
+可选的提示信息
+:::
+
+### 基础用法
+
+最简单的使用示例。
+
+:::demo 示例说明文字
+\`\`\`html
+<template>
+  <el-component prop="value">
+    内容
+  </el-component>
+</template>
+\`\`\`
+:::
+
+### 高级用法
+
+更复杂的使用场景。
+
+### Attributes
+
+| 参数 | 说明 | 类型 | 可选值 | 默认值 |
+|------|------|------|--------|--------|
+| type | 类型 | string | primary / success / warning / danger | — |
+| size | 尺寸 | string | medium / small / mini | — |
+| disabled | 是否禁用 | boolean | — | false |
+
+### Events
+
+| 事件名称 | 说明 | 回调参数 |
+|----------|------|----------|
+| click | 点击时触发 | event: Event |
+| change | 值改变时触发 | value: any |
+
+### Methods
+
+| 方法名 | 说明 | 参数 |
+|--------|------|------|
+| focus | 使组件获得焦点 | — |
+
+### Slots
+
+| 名称 | 说明 |
+|------|------|
+| — | 默认内容 |
+| header | 头部内容 |
+```
+
+### 2. Demo 代码块
+
+**使用 :::demo 标记：**
+```markdown
+:::demo 使用 `type` 属性设置按钮类型
+\`\`\`html
+<template>
+  <div>
+    <el-button type="primary">主要按钮</el-button>
+    <el-button type="success">成功按钮</el-button>
+  </div>
+</template>
+\`\`\`
+:::
+```
+
+### 3. 多语言文档
+
+**必须提供至少中英文文档：**
+```
+examples/docs/
+├── zh-CN/my-component.md  # 中文（必需）
+├── en-US/my-component.md  # 英文（必需）
+├── es/my-component.md     # 西班牙语（可选）
+└── fr-FR/my-component.md  # 法语（可选）
+```
+
+### 4. 更新导航配置
+
+**在 `examples/nav.config.json` 添加导航项：**
+```json
+{
+  "zh-CN": [
+    {
+      "name": "组件",
+      "groups": [
+        {
+          "groupName": "Basic",
+          "list": [
+            {
+              "path": "/my-component",
+              "title": "MyComponent 我的组件"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+---
+
+## 🧪 单元测试规范
+
+### 1. 测试文件命名
+
+```
+test/unit/specs/
+└── component-name.spec.js
+```
+
+### 2. 测试结构
+
+```javascript
+import { createTest, destroyVM } from '../util';
+import MyComponent from 'packages/my-component';
+
+describe('MyComponent', () => {
+  let vm;
+  
+  afterEach(() => {
+    destroyVM(vm);
+  });
+
+  it('create', () => {
+    vm = createTest(MyComponent, true);
+    expect(vm.$el).to.exist;
+  });
+
+  it('type', () => {
+    vm = createTest(MyComponent, {
+      type: 'primary'
+    }, true);
+    expect(vm.type).to.equal('primary');
+    expect(vm.$el.classList.contains('el-my-component--primary')).to.be.true;
+  });
+
+  it('disabled', () => {
+    vm = createTest(MyComponent, {
+      disabled: true
+    }, true);
+    expect(vm.$el.classList.contains('is-disabled')).to.be.true;
+  });
+
+  it('event', done => {
+    vm = createTest(MyComponent, {
+      onClick: () => {
+        expect(true).to.be.true;
+        done();
+      }
+    }, true);
+    vm.$el.click();
+  });
+
+  it('slot', () => {
+    vm = createTest(MyComponent, {}, true);
+    const elm = vm.$el.querySelector('.el-my-component__header');
+    expect(elm).to.exist;
+  });
+});
+```
+
+### 3. 测试覆盖要点
+
+- ✅ 组件创建和销毁
+- ✅ Props 验证
+- ✅ 事件触发
+- ✅ 插槽渲染
+- ✅ 公共方法调用
+- ✅ 边界情况和错误处理
+
+### 4. 运行测试
+
+```bash
+# 运行所有测试
+npm run test
+
+# 运行特定组件测试
+npm run test -- --grep MyComponent
+
+# 监听模式
+npm run test:watch
+```
+
+---
+
+## 📘 TypeScript 类型定义规范
+
+### 1. 组件类型定义
+
+**创建 `types/component-name.d.ts`：**
+```typescript
+import { ElementUIComponent } from './component'
+
+/** MyComponent type */
+export type MyComponentType = 'primary' | 'success' | 'warning' | 'danger'
+
+/** MyComponent size */
+export type MyComponentSize = 'medium' | 'small' | 'mini'
+
+/** MyComponent Component */
+export declare class ElMyComponent extends ElementUIComponent {
+  /** Component type */
+  type: MyComponentType
+
+  /** Component size */
+  size: MyComponentSize
+
+  /** Whether component is disabled */
+  disabled: boolean
+
+  /** Focus the component */
+  focus(): void
+}
+```
+
+### 2. 更新主类型文件
+
+**在 `types/element-ui.d.ts` 导出：**
+```typescript
+import { ElMyComponent } from './my-component'
+
+export class MyComponent extends ElMyComponent {}
+```
+
+### 3. 工具函数类型定义
+
+```typescript
+/**
+ * 格式化日期
+ * @param date 日期对象或时间戳
+ * @param format 格式化模板
+ * @returns 格式化后的字符串
+ */
+export function formatDate(
+  date: Date | number | string,
+  format?: string
+): string;
+```
+
+---
+
+## 🛠️ 工具函数开发规范
+
+### 1. 文件组织
+
+**位置：** `src/utils/tools.js`
+
+**结构：**
+```javascript
+/**
+ * 函数功能描述
+ * @param {Type} paramName - 参数说明
+ * @returns {Type} 返回值说明
+ * @example
+ * functionName(param1, param2)
+ * // => result
+ */
+export function functionName(param1, param2) {
+  // 实现
+}
+```
+
+### 2. 函数分类
+
+**核心工具（Core）：**
+- 深拷贝、对象合并、去重等
+
+**日期时间（DateTime）：**
+- formatDate, parseDate, getDateDiff 等
+
+**格式化（Format）：**
+- formatNumber, formatCurrency, formatBytes 等
+
+**验证（Validate）：**
+- isEmail, isPhone, isIdCard 等
+
+**DOM 操作（DOM）：**
+- addClass, removeClass, getStyle 等
+
+**存储（Storage）：**
+- setLocalStorage, getLocalStorage 等
+
+**URL 处理（URL）：**
+- parseQuery, buildQuery 等
+
+**安全（Security）：**
+- escapeHtml, sanitizeInput 等
+
+### 3. 函数编写规范
+
+```javascript
+/**
+ * ✅ 好的示例：完整的参数验证和错误处理
+ */
+export function formatDate(date, format = 'YYYY-MM-DD HH:mm:ss') {
+  // 参数验证
+  if (date === null || date === undefined) return '';
+  
+  // 类型转换
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  
+  // 错误处理
+  try {
+    return fecha.format(d, format);
+  } catch (e) {
+    console.warn('formatDate error:', e);
+    return '';
+  }
+}
+
+/**
+ * ❌ 避免：缺少验证和错误处理
+ */
+export function formatDate(date, format) {
+  return fecha.format(new Date(date), format);  // 可能抛出错误
+}
+```
+
+### 4. 导出规范
+
+**具名导出（推荐）：**
+```javascript
+export function formatDate() { }
+export function parseDate() { }
+```
+
+**默认导出（避免）：**
+```javascript
+// ❌ 不推荐
+export default {
+  formatDate,
+  parseDate
+}
+```
+
+---
+
+## 🎯 自定义指令开发规范
+
+### 1. 文件位置
+
+`src/utils/custom-directives.js`
+
+### 2. 指令结构
+
+```javascript
+/**
+ * 指令名称 v-directive-name
+ * 指令功能描述
+ * @example
+ * <div v-directive-name="value"></div>
+ */
+export const directiveName = {
+  bind(el, binding, vnode) {
+    // 只调用一次，指令第一次绑定到元素时调用
+  },
+  
+  inserted(el, binding, vnode) {
+    // 被绑定元素插入父节点时调用
+  },
+  
+  update(el, binding, vnode, oldVnode) {
+    // 所在组件的 VNode 更新时调用
+  },
+  
+  componentUpdated(el, binding, vnode, oldVnode) {
+    // 指令所在组件的 VNode 及其子 VNode 全部更新后调用
+  },
+  
+  unbind(el, binding, vnode) {
+    // 只调用一次，指令与元素解绑时调用
+  }
+};
+```
+
+### 3. 指令命名规范
+
+**指令名称：** 使用 `kebab-case`
+```javascript
+// ✅ 正确
+export const debounce = { }
+export const longpress = { }
+export const auth = { }
+
+// ❌ 错误
+export const vDebounce = { }
+export const Longpress = { }
+```
+
+**使用时：**
+```html
+<button v-debounce="handleClick">点击</button>
+<div v-longpress="handleLongPress">长按</div>
+<el-button v-auth="'admin'">删除</el-button>
+```
+
+### 4. 错误处理
+
+```javascript
+export const auth = {
+  inserted(el, binding) {
+    try {
+      const value = binding.value;
+      
+      // 参数验证
+      if (typeof value !== 'string') {
+        console.warn('[v-auth] 参数类型错误，需要 string');
+        return;
+      }
+      
+      // 依赖检查
+      if (!window.yq || !window.yq.remoteCall) {
+        console.error('[v-auth] yq.remoteCall 不可用');
+        return;
+      }
+      
+      // 业务逻辑
+      // ...
+    } catch (e) {
+      console.error('[v-auth] 执行错误:', e);
+    }
+  }
+};
+```
+
+---
+
+## 🔍 代码质量规范
+
+### 1. ESLint 规范
+
+**配置：** 使用 `eslint-config-elemefe`
+
+**规则：**
+```javascript
+{
+  "extends": "elemefe",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
+}
+```
+
+**检查命令：**
+```bash
+# 检查代码
+npm run lint
+
+# 自动修复
+npm run lint:fix
+```
+
+**必须通过 ESLint 检查才能提交代码**
+
+### 2. 代码格式化
+
+**缩进：** 2 个空格
+```javascript
+// ✅ 正确
+function example() {
+  if (condition) {
+    doSomething();
+  }
+}
+
+// ❌ 错误（4 个空格）
+function example() {
+    if (condition) {
+        doSomething();
+    }
+}
+```
+
+**引号：** 单引号
+```javascript
+// ✅ 正确
+const str = 'hello';
+import Component from './component';
+
+// ❌ 错误
+const str = "hello";
+```
+
+**分号：** 必须使用分号
+```javascript
+// ✅ 正确
+const a = 1;
+function test() { }
+
+// ❌ 错误
+const a = 1
+function test() { }
+```
+
+### 3. 注释规范
+
+**文件头注释：**
+```javascript
+/**
+ * 文件功能描述
+ * @author 作者名称
+ * @date 创建日期
+ */
+```
+
+**函数注释：**
+```javascript
+/**
+ * 函数功能描述
+ * @param {Type} paramName - 参数说明
+ * @param {Type} [optionalParam] - 可选参数说明
+ * @returns {Type} 返回值说明
+ * @throws {Error} 可能抛出的错误
+ * @example
+ * functionName(param1, param2)
+ * // => expected result
+ */
+export function functionName(paramName, optionalParam) {
+  // 实现
+}
+```
+
+**复杂逻辑注释：**
+```javascript
+// 单行注释说明
+
+/*
+ * 多行注释
+ * 用于复杂逻辑说明
+ */
+```
+
+**TODO 注释：**
+```javascript
+// TODO: 待实现的功能
+// FIXME: 需要修复的问题
+// HACK: 临时解决方案
+// NOTE: 重要说明
+```
+
+### 4. 性能优化建议
+
+**避免在循环中创建函数：**
+```javascript
+// ✅ 好
+methods: {
+  handleClick(item) {
+    // 处理逻辑
+  }
+}
+
+// ❌ 差
+computed: {
+  items() {
+    return this.list.map(item => ({
+      ...item,
+      onClick: () => this.handleClick(item)  // 每次都创建新函数
+    }));
+  }
+}
+```
+
+**使用计算属性缓存：**
+```javascript
+// ✅ 好
+computed: {
+  filteredList() {
+    return this.list.filter(item => item.active);
+  }
+}
+
+// ❌ 差
+methods: {
+  getFilteredList() {
+    return this.list.filter(item => item.active);  // 每次调用都重新计算
+  }
+}
+```
+
+**合理使用 v-if 和 v-show：**
+```javascript
+// v-if: 条件不频繁切换时使用
+<div v-if="isShow">内容</div>
+
+// v-show: 频繁切换时使用
+<div v-show="isVisible">内容</div>
+```
+
+---
+
+## 📦 构建和发布规范
+
+### 1. 构建命令
+
+```bash
+# 生成组件入口文件
+npm run build:file
+
+# 构建主题样式
+npm run build:theme
+
+# 构建工具函数
+npm run build:utils
+
+# 完整构建
+npm run dist
+
+# 构建文档
+npm run deploy:build
+```
+
+### 2. 发布前检查清单
+
+**代码质量：**
+- [ ] 通过 ESLint 检查
+- [ ] 通过所有单元测试
+- [ ] 无控制台错误和警告
+- [ ] 代码已格式化
+
+**组件完整性：**
+- [ ] 组件已在 `components.json` 注册
+- [ ] 样式已在 `index.scss` 导入
+- [ ] 中英文文档已完成
+- [ ] 导航配置已更新
+- [ ] TypeScript 类型定义已完成
+
+**功能验证：**
+- [ ] 基础功能正常
+- [ ] Props 验证正确
+- [ ] 事件触发正常
+- [ ] 样式显示正常
+- [ ] 响应式布局正常
+
+### 3. 版本号规范
+
+遵循语义化版本（Semantic Versioning）：
+
+```
+主版本号.次版本号.修订号 (MAJOR.MINOR.PATCH)
+
+1.0.0 -> 1.0.1  // 修复 bug
+1.0.1 -> 1.1.0  // 新增功能（向下兼容）
+1.1.0 -> 2.0.0  // 重大变更（不向下兼容）
+```
+
+---
+
+## 🔐 安全规范
+
+### 1. XSS 防护
+
+**使用 xss 库过滤用户输入：**
+```javascript
+import xss from 'xss';
+
+export function sanitizeInput(input) {
+  return xss(input);
+}
+```
+
+**避免使用 v-html：**
+```vue
+<!-- ✅ 推荐 -->
+<div>{{ userContent }}</div>
+
+<!-- ⚠️ 谨慎使用，必须过滤 -->
+<div v-html="sanitizedContent"></div>
+```
+
+### 2. 权限控制
+
+**使用 v-auth 指令：**
+```html
+<el-button v-auth="'admin'">删除</el-button>
+<el-button v-auth="'admin;editor'">编辑</el-button>
+```
+
+### 3. 敏感信息
+
+**不要在代码中硬编码敏感信息：**
+```javascript
+// ❌ 错误
+const API_KEY = 'sk-1234567890abcdef';
+
+// ✅ 正确：使用环境变量
+const API_KEY = process.env.VUE_APP_API_KEY;
+```
+
+---
+
+## 🚀 开发流程
+
+### 1. 开发新组件
+
+```bash
+# 1. 使用脚手架创建组件（推荐）
+npm run new component-name 组件中文名
+
+# 2. 启动开发服务器
+npm run dev
+
+# 3. 访问 http://localhost:8085 查看文档
+
+# 4. 开发完成后运行测试
+npm run test
+
+# 5. 代码检查
+npm run lint:fix
+
+# 6. 构建
+npm run dist
+```
+
+### 2. 开发工具函数
+
+```bash
+# 1. 在 src/utils/tools.js 添加函数
+# 2. 添加 JSDoc 注释
+# 3. 添加 TypeScript 类型定义
+# 4. 在对应分类的文档中添加说明
+# 5. 更新导航配置
+```
+
+### 3. Git 提交规范
+
+**提交信息格式：**
+```bash
+<type>(<scope>): <subject>
+
+# type 类型：
+- feat: 新功能
+- fix: 修复 bug
+- docs: 文档修改
+- style: 代码格式修改
+- refactor: 重构
+- test: 测试相关
+- chore: 构建/工具相关
+
+# 示例：
+feat(button): 添加 loading 状态
+fix(dialog): 修复关闭时的内存泄漏
+docs(button): 更新文档示例
+```
+
+---
+
+## 🎓 最佳实践
+
+### 1. 组件设计原则
+
+- **单一职责：** 每个组件只做一件事
+- **可组合性：** 组件可以相互组合使用
+- **可配置性：** 提供足够的 props 以满足不同需求
+- **可扩展性：** 提供插槽、事件等扩展机制
+- **向后兼容：** 新版本保持 API 兼容
+
+### 2. 性能优化
+
+- 使用 `computed` 缓存计算结果
+- 合理使用 `v-if` 和 `v-show`
+- 大列表使用虚拟滚动
+- 避免深层嵌套的响应式数据
+- 使用 `Object.freeze()` 冻结不需要响应的数据
+
+### 3. 可访问性
+
+- 提供合理的 ARIA 属性
+- 支持键盘导航
+- 确保颜色对比度足够
+- 提供清晰的 focus 状态
+
+### 4. 错误处理
+
+- 提供清晰的错误提示
+- 使用 try-catch 捕获异常
+- 在 console 中输出有用的调试信息
+- 提供降级方案
+
+---
+
+## 📚 参考资源
+
+- [Vue.js 官方文档](https://cn.vuejs.org/)
+- [Element UI 官方文档](https://element.eleme.cn/)
+- [BEM 命名规范](http://getbem.com/)
+- [JavaScript 标准样式](https://standardjs.com/)
+- [语义化版本规范](https://semver.org/lang/zh-CN/)
+
+---
+
+## ✅ 总结
+
+遵循本规范可以确保：
+
+1. **代码一致性：** 统一的命名、格式、结构
+2. **可维护性：** 清晰的注释、模块化设计
+3. **可测试性：** 完善的单元测试覆盖
+4. **可扩展性：** 良好的架构设计
+5. **团队协作：** 统一的开发流程和规范
+
+**记住：规范不是束缚，而是提高开发效率和代码质量的保障！**

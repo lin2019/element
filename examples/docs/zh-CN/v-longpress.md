@@ -1,3 +1,60 @@
+## 自定义指令 v-longpress 长按
+
+按住一定时间后触发回调，常用于移动端或需要确认的操作。
+
+### 基础用法
+
+::::demo 按住按钮超过 600ms 触发回调。
+
+```html
+<template>
+  <div>
+    <el-button type="danger" v-longpress="onLongPress">长按 600ms 触发</el-button>
+  </div>
+  <script>
+    export default {
+      methods: {
+        onLongPress() {
+          this.$message.warning('长按触发')
+        }
+      }
+    }
+  </script>
+</template>
+```
+
+::::
+
+### 自定义参数
+
+::::demo 通过对象传入 `duration` 和 `preventContextMenu`。
+
+```html
+<template>
+  <div>
+    <el-button type="primary" v-longpress="{ handler: onLongPressCustom, duration: 1000, preventContextMenu: true }">长按 1s 触发</el-button>
+  </div>
+  <script>
+    export default {
+      methods: {
+        onLongPressCustom() {
+          this.$message.info('1s 长按触发')
+        }
+      }
+    }
+  </script>
+</template>
+```
+
+::::
+
+### API
+
+| 参数/类型     | 说明                                                      |
+| ------------- | --------------------------------------------------------- |
+| 值为 Function | 直接作为回调函数，默认 `duration=600ms`                   |
+| 值为 Object   | 传入 `{ handler, duration=600, preventContextMenu=true }` |
+
 ## 长按指令 v-longpress
 
 长按元素时触发事件。
